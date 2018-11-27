@@ -156,7 +156,7 @@ extension ArticleVC: UITableViewDelegate, UITableViewDataSource {
         
         cell.selectionStyle = .none
         
-        cell.notificationsSwitchHandler = { [weak self] in
+        cell.sharingSwitchHandler = { [weak self] in
             
             guard self != nil else {
                 return
@@ -168,7 +168,7 @@ extension ArticleVC: UITableViewDelegate, UITableViewDataSource {
             self?.present(activityViewController, animated: true, completion: nil)
         }
         
-        cell.notificationsSwitchHandler2 = { [weak self] in
+        cell.saveToCoreDataSwitchHandler = { [weak self] in
             
             guard self != nil else {
                 return
@@ -182,7 +182,7 @@ extension ArticleVC: UITableViewDelegate, UITableViewDataSource {
             savedArticles.append(article)
         }
         
-        cell.notificationsSwitchHandler3 = { [weak self] in
+        cell.copyTextSwitchHandler = { [weak self] in
             
             guard self != nil else {
                 return

@@ -32,25 +32,25 @@ class ArticleCell: UITableViewCell {
         articleLabel.text = articleText
     }
     
-    var notificationsSwitchHandler: (() -> Void)?
-    var notificationsSwitchHandler2: (() -> Void)?
-    var notificationsSwitchHandler3: (() -> Void)?
+    var sharingSwitchHandler: (() -> Void)?
+    var saveToCoreDataSwitchHandler: (() -> Void)?
+    var copyTextSwitchHandler: (() -> Void)?
     
     @IBAction func shareText(_ sender: Any) {
         print("Sharing DATA")
         
-        notificationsSwitchHandler?()
+        sharingSwitchHandler?()
     }
     
     @IBAction func saveData(_ sender: Any) {
         print("SAVING/REMOVING DATA")
         Saved.setImage(UIImage(named: "BlackStar95"), for: .normal)
-        notificationsSwitchHandler2?()
+        saveToCoreDataSwitchHandler?()
     }
     @IBAction func copyText(_ sender: Any) {
         print("Copied Text")
         
-        notificationsSwitchHandler3?()
+        copyTextSwitchHandler?()
     }
     
 }
