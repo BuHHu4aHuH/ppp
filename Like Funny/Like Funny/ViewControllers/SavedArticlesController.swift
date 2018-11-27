@@ -59,6 +59,7 @@ extension SavedArticlesController: UITableViewDelegate, UITableViewDataSource {
         cell.articleLabel.text = savedArticles[indexPath.item].article
         
         cell.selectionStyle = .none
+        cell.Saved.setImage(UIImage(named: "BlackStar95"), for: .normal)
         
         cell.notificationsSwitchHandler = { [weak self] in
             

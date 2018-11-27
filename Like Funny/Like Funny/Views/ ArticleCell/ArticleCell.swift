@@ -44,7 +44,7 @@ class ArticleCell: UITableViewCell {
     
     @IBAction func saveData(_ sender: Any) {
         print("SAVING/REMOVING DATA")
-        //Saved.imageView?.image = UIImage(named: "BlackStar95")
+        Saved.setImage(UIImage(named: "BlackStar95"), for: .normal)
         notificationsSwitchHandler2?()
     }
     @IBAction func copyText(_ sender: Any) {
