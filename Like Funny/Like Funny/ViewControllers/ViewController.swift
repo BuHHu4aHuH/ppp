@@ -8,10 +8,13 @@
 
 import UIKit
 import CoreData
+import GoogleMobileAds
 
 var savedArticles = [Article]()
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, GADBannerViewDelegate {
+    
+    var bannerView: GADBannerView!
     
     @IBOutlet weak var tableView: UITableView!
     let tableViewCellHeight: Int = 70
@@ -32,6 +35,22 @@ class ViewController: UIViewController {
     
         categoriesMass = getData(category: "_root")
         setupTableView()
+        setupBanner()
+    }
+    
+    //Setup Banner
+    
+    func setupBanner() {
+        bannerView = GADBannerView(adSize: kGADAdSizeSmartBannerPortrait)
+        self.view.addSubview(bannerView)
+        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        bannerView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor).isActive = true
+        let requestAD: GADRequest = GADRequest()
+        requestAD.testDevices = [kGADSimulatorID]
+        bannerView.load(requestAD)
     }
     
     //Open Saved
@@ -66,7 +85,9 @@ class ViewController: UIViewController {
                         
                         if let parent = v.parent {
                             if (parent == category) {
-                                if let name = v.name {  categoriesMass.append(name) }
+                                if let name = v.name {
+                                    categoriesMass.append(name)
+                                }
                                 keyMass.append(k)
                                 if (category != "_root") {
                                     childKeyMass.append(k)
@@ -83,6 +104,11 @@ class ViewController: UIViewController {
         return categoriesMass
     }
     
+    //Func Sorting
+    
+    func sorting() {
+       
+    }
     
 }
 

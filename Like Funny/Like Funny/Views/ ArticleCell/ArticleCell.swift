@@ -14,6 +14,8 @@ class ArticleCell: UITableViewCell {
     @IBOutlet weak var authurLabel: UILabel!
     @IBOutlet weak var displayedView: UIView!
     
+    var bool: Bool = false
+    
     @IBOutlet weak var Saved: UIButton!
     override func awakeFromNib() {
         super.awakeFromNib()

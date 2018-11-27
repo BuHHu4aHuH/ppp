@@ -90,7 +90,10 @@ class ArticleVC: UIViewController {
                                                         let cleaningSecond = cleanValue.replacingOccurrences(of: "&#39;", with: "'", options: .regularExpression, range: nil)
                                                         let cleaningThird = cleaningSecond.replacingOccurrences(of: "&nbsp;", with: "", options: .regularExpression, range: nil)
                                                         let cleaningForth = cleaningThird.replacingOccurrences(of: "&quot;", with: "\"" , options: .regularExpression, range: nil)
-                                                        textsArray.append(cleaningForth)
+                                                        let cleaningFifth = cleaningForth.replacingOccurrences(of: "&mdash;", with: "-", options: .regularExpression, range: nil)
+                                                        let cleaningSixth = cleaningFifth.replacingOccurrences(of: "&ndash;", with: "-", options: .regularExpression, range: nil)
+                                                        let cleaningSeventh = cleaningSixth.replacingOccurrences(of: "&rsquo;", with: "’", options: .regularExpression, range: nil)
+                                                        textsArray.append(cleaningSeventh)
                                                     }
                                                 }
                                             }
@@ -191,7 +194,6 @@ extension ArticleVC: UITableViewDelegate, UITableViewDataSource {
             UIPasteboard.general.string = self!.textsArray[indexPath.item]
             
             self!.createAlert(title: "Warning", message: "Here will be text soon...")
-            
         }
         
         return cell

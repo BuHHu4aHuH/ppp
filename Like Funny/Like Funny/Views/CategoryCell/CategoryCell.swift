@@ -10,7 +10,6 @@ import UIKit
 
 class CategoryCell: UITableViewCell {
 
-
     @IBOutlet weak var arroyImage: UIImageView!
     @IBOutlet weak var txtLabel: UILabel!
     
