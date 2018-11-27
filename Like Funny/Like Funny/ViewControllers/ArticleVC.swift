@@ -190,7 +190,7 @@ extension ArticleVC: UITableViewDelegate, UITableViewDataSource {
             
             UIPasteboard.general.string = self!.textsArray[indexPath.item]
             
-            self!.createAlert(title: "Warning", message: "Text has been copied")
+            self!.createAlert(title: "Warning", message: "Here will be text soon...")
             
         }
         

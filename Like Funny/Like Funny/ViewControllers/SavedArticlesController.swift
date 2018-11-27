@@ -95,7 +95,7 @@ extension SavedArticlesController: UITableViewDelegate, UITableViewDataSource {
             
             UIPasteboard.general.string = savedArticles[indexPath.item].article
             
-            self!.createAlert(title: "Warning", message: "Text has been copied")
+            self!.createAlert(title: "Warning", message: "Here will be text soon...")
             
         }
         return cell
