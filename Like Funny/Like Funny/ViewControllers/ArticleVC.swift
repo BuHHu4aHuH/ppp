@@ -1,0 +1,183 @@
+//
+//  ArticleVC.swift
+//  Like Funny
+//
+//  Created by Maksim Shershun on 11/17/18.
+//  Copyright © 2018 Maksim Shershun. All rights reserved.
+//
+
+import UIKit
+import CoreData
+
+class ArticleVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    @IBOutlet weak var tableView: UITableView!
+    let tableViewCellHeight: Int = 150
+    
+    var navigationTitle: String?
+    
+    var category: String?
+    var categoriesMass = Feed()
+    var textsArray = [String]()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.navigationItem.title = navigationTitle
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "BlackStar95"), style: .plain, target: self, action: #selector(addTapped))
+        
+        let fetchRequest: NSFetchRequest<Article> = Article.fetchRequest()
+        
+        do {
+            let article = try PersistenceServce.context.fetch(fetchRequest)
+            savedArticles = article
+        } catch {
+            
+        }
+        
+        getData()
+        setupTableView()
+    }
+    
+    @objc func addTapped() {
+        let desVC = storyboard?.instantiateViewController(withIdentifier: "SavedArticlesController") as! SavedArticlesController
+        
+        self.navigationController?.pushViewController(desVC, animated: true)
+    }
+    
+    deinit {
+        textsArray.removeAll()
+    }
+    
+    func getData() {
+        DataService.shared.getData { (data) in
+            do {
+                let decoder = JSONDecoder()
+                self.categoriesMass = try decoder.decode(Feed.self, from: data)
+                
+                if let dict2 = categoriesMass.items {
+                    for (k, v) in dict2 {
+                        
+                        if let categories = v.categories {
+                            let amountOfCategories = categories.count
+                            var i = 0
+                            repeat {
+                                if (category == categories[i]) {
+                                    if let elements = v.elements {
+                                        let amountOfElements = elements.count
+                                        var j = 0
+                                        
+                                        repeat {
+                                            
+                                            let heshKey = elements.keys
+                                            let dataDict = elements[heshKey.first!]
+                                            if let data = dataDict?.data {
+                                                if let zero = data.zero {
+                                                    if let value = zero.value {
+                                                        let cleanValue = value.replacingOccurrences(of: "<[^>]+>", with: "\n", options: .regularExpression, range: nil)
+                                                        let cleaningSecond = cleanValue.replacingOccurrences(of: "&#39;", with: "'", options: .regularExpression, range: nil)
+                                                        let cleaningThird = cleaningSecond.replacingOccurrences(of: "&nbsp;", with: "", options: .regularExpression, range: nil)
+                                                        let cleaningForth = cleaningThird.replacingOccurrences(of: "&quot;", with: "\"" , options: .regularExpression, range: nil)
+                                                        textsArray.append(cleaningForth)
+                                                    }
+                                                }
+                                            }
+                                            if (amountOfElements >= 2) {
+                                                break
+                                            } else {
+                                                j = j + 1;
+                                            }
+                                            
+                                        } while (j < amountOfElements)
+                                        
+                                        
+                                    }
+                                    break;
+                                }
+                                i = i + 1;
+                            } while (i < amountOfCategories)
+                        }
+                    }
+                }
+                
+            } catch {
+                print("ERROR:", error)
+            }
+        }
+    }
+    
+    
+    func setupTableView() {
+        tableView.dataSource = self
+        tableView.delegate = self
+        
+        tableView.estimatedRowHeight = tableView.rowHeight
+        tableView.rowHeight = UITableView.automaticDimension
+        
+        tableView.separatorStyle = .none
+        
+        let nibName = UINib(nibName: ArticleCell.identifier, bundle: nil)
+        tableView.register(nibName, forCellReuseIdentifier: ArticleCell.identifier)
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return textsArray.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: ArticleCell.identifier, for: indexPath) as! ArticleCell
+        
+        cell.articleLabel.text = textsArray[indexPath.item]
+        
+        cell.selectionStyle = .none
+        
+        cell.notificationsSwitchHandler = { [weak self] in
+            
+            guard self != nil else {
+                return
+            }
+            
+            let textShare = [ self!.textsArray[indexPath.item] ]
+            let activityViewController = UIActivityViewController(activityItems: textShare , applicationActivities: nil)
+            activityViewController.popoverPresentationController?.sourceView = self?.view
+            self?.present(activityViewController, animated: true, completion: nil)
+        }
+        
+        cell.notificationsSwitchHandler2 = { [weak self] in
+            
+            guard self != nil else {
+                return
+            }
+            
+            cell.Saved?.imageView?.image = UIImage(named: "BlackStar95")
+            
+            let article = Article(context: PersistenceServce.context)
+            article.article = self?.textsArray[indexPath.item]
+            article.category = self!.category
+            PersistenceServce.saveContext()
+            savedArticles.append(article)
+        }
+        
+        cell.notificationsSwitchHandler3 = { [weak self] in
+            
+            guard self != nil else {
+                return
+            }
+            
+            UIPasteboard.general.string = self!.textsArray[indexPath.item]
+            
+            self!.createAlert(title: "Warning", message: "Text has been copied")
+            
+        }
+        
+        return cell
+    }
+    
+    func createAlert (title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        alert.addAction(okAction)
+        self.present(alert, animated:  true, completion: nil)
+    }
+}
