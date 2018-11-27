@@ -18,6 +18,5 @@ extension Article {
     }
 
     @NSManaged public var article: String?
-    @NSManaged public var category: String?
 
 }

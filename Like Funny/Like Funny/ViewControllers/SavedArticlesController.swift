@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class SavedArticlesController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SavedArticlesController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
@@ -20,7 +20,21 @@ class SavedArticlesController: UIViewController, UITableViewDelegate, UITableVie
         
         setupTableView()
     }
+    
+    //Alert
+    
+    func createAlert (title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        alert.addAction(okAction)
+        self.present(alert, animated:  true, completion: nil)
+    }
+}
 
+extension SavedArticlesController: UITableViewDelegate, UITableViewDataSource {
+    
+    //TableView
+    
     func setupTableView() {
         tableView.dataSource = self
         tableView.delegate = self
@@ -84,12 +98,5 @@ class SavedArticlesController: UIViewController, UITableViewDelegate, UITableVie
             
         }
         return cell
-    }
-    
-    func createAlert (title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
-        alert.addAction(okAction)
-        self.present(alert, animated:  true, completion: nil)
     }
 }

@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class ArticleVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ArticleVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     let tableViewCellHeight: Int = 150
@@ -27,6 +27,14 @@ class ArticleVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "BlackStar95"), style: .plain, target: self, action: #selector(addTapped))
         
+        fetchRequest()
+        getData()
+        setupTableView()
+    }
+    
+    //Fetch Request
+    
+    func fetchRequest() {
         let fetchRequest: NSFetchRequest<Article> = Article.fetchRequest()
         
         do {
@@ -35,10 +43,9 @@ class ArticleVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         } catch {
             
         }
-        
-        getData()
-        setupTableView()
     }
+    
+    //Open Saved ViewController
     
     @objc func addTapped() {
         let desVC = storyboard?.instantiateViewController(withIdentifier: "SavedArticlesController") as! SavedArticlesController
@@ -46,9 +53,13 @@ class ArticleVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         self.navigationController?.pushViewController(desVC, animated: true)
     }
     
+    //Deinit old textArray
+    
     deinit {
         textsArray.removeAll()
     }
+    
+    //Get Data
     
     func getData() {
         DataService.shared.getData { (data) in
@@ -107,6 +118,19 @@ class ArticleVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    //Alert
+    
+    func createAlert (title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        alert.addAction(okAction)
+        self.present(alert, animated:  true, completion: nil)
+    }
+}
+
+extension ArticleVC: UITableViewDelegate, UITableViewDataSource {
+    
+    //TableView
     
     func setupTableView() {
         tableView.dataSource = self
@@ -154,7 +178,6 @@ class ArticleVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             
             let article = Article(context: PersistenceServce.context)
             article.article = self?.textsArray[indexPath.item]
-            article.category = self!.category
             PersistenceServce.saveContext()
             savedArticles.append(article)
         }
@@ -172,12 +195,5 @@ class ArticleVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         }
         
         return cell
-    }
-    
-    func createAlert (title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
-        alert.addAction(okAction)
-        self.present(alert, animated:  true, completion: nil)
     }
 }

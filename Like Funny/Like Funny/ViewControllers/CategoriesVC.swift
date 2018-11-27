@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CategoriesVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class CategoriesVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -55,6 +55,12 @@ class CategoriesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         }
     }
     
+}
+
+extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
+    
+    //TableView
+    
     func setupTableView() {
         tableView.dataSource = self
         tableView.delegate = self
@@ -87,17 +93,19 @@ class CategoriesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         return CGFloat(tableViewCellHeight)
     }
     
+    //Searching Child Categories
+    
     func searchingCategories(categoryKey: String, category: String) {
         getData(category: categoryKey)
         if (categoriesChildMass.count != 0) {
             let desVC = storyboard?.instantiateViewController(withIdentifier: "CategoriesChildVC") as! CategoriesChildVC
-
+            
             desVC.navigationTitle = category
             desVC.categoriesMass = categoriesChildMass
             desVC.keyMass = childKeysMass
-
+            
             self.navigationController?.pushViewController(desVC, animated: true)
-
+            
             categoriesChildMass.removeAll()
             childKeysMass.removeAll()
         } else {
@@ -112,5 +120,4 @@ class CategoriesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             childKeysMass.removeAll()
         }
     }
-    
 }

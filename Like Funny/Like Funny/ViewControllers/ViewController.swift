@@ -11,7 +11,7 @@ import CoreData
 
 var savedArticles = [Article]()
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     let tableViewCellHeight: Int = 70
@@ -22,6 +22,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var categoriesMass = [String]()
     var keyMass = [String]()
     
+    var childMass = [String]()
+    var childKeyMass = [String]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,7 +34,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         setupTableView()
     }
     
-    //Get Data
+    //Open Saved
     
     @objc func addTapped() {
         let desVC = storyboard?.instantiateViewController(withIdentifier: "SavedArticlesController") as! SavedArticlesController
@@ -46,6 +49,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         self.navigationController?.pushViewController(desVC, animated: true)
     }
+    
+    //Get Data
     
     func getData(category: String) -> [String] {
         var categoriesMass = [String]()
@@ -77,6 +82,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         return categoriesMass
     }
+    
+    
+}
+
+extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     //TableView
     
@@ -113,11 +123,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         searchingCategories(categoryKey: keyMass[indexPath.item], category: categoriesMass[indexPath.item])
     }
     
-    var childMass = [String]()
-    var childKeyMass = [String]()
+    //Searching Child Categories
     
     func searchingCategories(categoryKey: String, category: String) {
-       childMass = getData(category: categoryKey)
+        childMass = getData(category: categoryKey)
         if (childMass.count != 0) {
             let desVC = storyboard?.instantiateViewController(withIdentifier: "CategoriesVC") as! CategoriesVC
             
