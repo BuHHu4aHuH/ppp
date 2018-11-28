@@ -49,7 +49,7 @@ extension SavedArticlesController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (savedArticles.count)
+        return savedArticles.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -59,22 +59,24 @@ extension SavedArticlesController: UITableViewDelegate, UITableViewDataSource {
         cell.articleLabel.text = savedArticles[indexPath.item].article
         
         cell.selectionStyle = .none
-        cell.Saved.setImage(UIImage(named: "BlackStar95"), for: .normal)
+        cell.saved.setImage(UIImage(named: "BlackStar95"), for: .normal)
         
         cell.sharingSwitchHandler = { [weak self] in
             
+            //TODO: Use guard let `self` = self else { return }
             guard self != nil else {
                 return
             }
             
-            let textShare = [ savedArticles[indexPath.item].article ]
-            let activityViewController = UIActivityViewController(activityItems: textShare , applicationActivities: nil)
+            let textShare = savedArticles[indexPath.item].article
+            let activityViewController = UIActivityViewController(activityItems: [textShare], applicationActivities: nil)
             activityViewController.popoverPresentationController?.sourceView = self?.view
             self?.present(activityViewController, animated: true, completion: nil)
         }
         
         cell.saveToCoreDataSwitchHandler = { [weak self] in
             
+            //TODO: Use guard let `self` = self else { return }
             guard self != nil else {
                 return
             }
@@ -89,6 +91,7 @@ extension SavedArticlesController: UITableViewDelegate, UITableViewDataSource {
         
         cell.copyTextSwitchHandler = { [weak self] in
             
+            //TODO: Use guard let `self` = self else { return }
             guard self != nil else {
                 return
             }

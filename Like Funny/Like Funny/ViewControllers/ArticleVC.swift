@@ -12,6 +12,7 @@ import CoreData
 class ArticleVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    
     let tableViewCellHeight: Int = 150
     
     var navigationTitle: String?
@@ -23,8 +24,8 @@ class ArticleVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //TODO: add func setupNavBar()
         self.navigationItem.title = navigationTitle
-        
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "BlackStar95"), style: .plain, target: self, action: #selector(addTapped))
         
         fetchRequest()
@@ -60,9 +61,9 @@ class ArticleVC: UIViewController {
     }
     
     //Get Data
-    
+    //TODO: NEED TO REFACTORING!!!!!!!!!!!!!!!!!!!!
     func getData() {
-        DataService.shared.getData { (data) in
+        DataService.getData { (data) in
             do {
                 let decoder = JSONDecoder()
                 self.categoriesMass = try decoder.decode(Feed.self, from: data)
@@ -123,7 +124,7 @@ class ArticleVC: UIViewController {
     
     //Alert
     
-    func createAlert (title: String, message: String) {
+    func createAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
         alert.addAction(okAction)
@@ -161,39 +162,34 @@ extension ArticleVC: UITableViewDelegate, UITableViewDataSource {
         
         cell.sharingSwitchHandler = { [weak self] in
             
-            guard self != nil else {
-                return
-            }
+            guard let `self` = self else { return }
             
-            let textShare = [ self!.textsArray[indexPath.item] ]
-            let activityViewController = UIActivityViewController(activityItems: textShare , applicationActivities: nil)
-            activityViewController.popoverPresentationController?.sourceView = self?.view
-            self?.present(activityViewController, animated: true, completion: nil)
+            let textShare = self.textsArray[indexPath.item]
+            let activityViewController = UIActivityViewController(activityItems: [textShare], applicationActivities: nil)
+            activityViewController.popoverPresentationController?.sourceView = self.view
+            self.present(activityViewController, animated: true, completion: nil)
         }
         
         cell.saveToCoreDataSwitchHandler = { [weak self] in
             
-            guard self != nil else {
-                return
-            }
+            guard let `self` = self else { return }
             
-            cell.Saved?.imageView?.image = UIImage(named: "BlackStar95")
+            //TODO: Change this to setupSaveButton(isSaved: Bool)
+            cell.saved?.imageView?.image = UIImage(named: "BlackStar95")
             
             let article = Article(context: PersistenceServce.context)
-            article.article = self?.textsArray[indexPath.item]
+            article.article = self.textsArray[indexPath.item]
             PersistenceServce.saveContext()
             savedArticles.append(article)
         }
         
         cell.copyTextSwitchHandler = { [weak self] in
             
-            guard self != nil else {
-                return
-            }
+            guard let `self` = self else { return }
             
-            UIPasteboard.general.string = self!.textsArray[indexPath.item]
+            UIPasteboard.general.string = self.textsArray[indexPath.item]
             
-            self!.createAlert(title: "Warning", message: "Here will be text soon...")
+            self.createAlert(title: "Warning", message: "Here will be text soon...")
         }
         
         return cell

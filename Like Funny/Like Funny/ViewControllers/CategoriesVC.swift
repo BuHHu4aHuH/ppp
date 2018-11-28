@@ -31,7 +31,7 @@ class CategoriesVC: UIViewController {
     }
     
     func getData(category: String) {
-        DataService.shared.getData { (data) in
+        DataService.getData { (data) in
             do {
                 let decoder = JSONDecoder()
                 self.categories = try decoder.decode(Feed.self, from: data)
@@ -41,7 +41,7 @@ class CategoriesVC: UIViewController {
                     for (k, v) in dict {
                         
                         if let parent = v.parent {
-                            if (parent == category) {
+                            if parent == category {
                                 if let name = v.name {  categoriesChildMass.append(name) }
                                 childKeysMass.append(k)
                             }
@@ -97,7 +97,8 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     
     func searchingCategories(categoryKey: String, category: String) {
         getData(category: categoryKey)
-        if (categoriesChildMass.count != 0) {
+        
+        if categoriesChildMass.count != 0 {
             let desVC = storyboard?.instantiateViewController(withIdentifier: "CategoriesChildVC") as! CategoriesChildVC
             
             desVC.navigationTitle = category

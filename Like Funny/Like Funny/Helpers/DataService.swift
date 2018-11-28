@@ -9,13 +9,13 @@
 import Foundation
 
 class DataService {
-    
-    private init() {}
-    static let shared = DataService()
-    
-    func getData(completion: (Data) -> Void) {
+     
+    static func getData(completion: (Data) -> Void) {
+        
         guard let path = Bundle.main.path(forResource: "pozdravleniya", ofType: ".json") else { return }
+        
         let url = URL(fileURLWithPath: path)
+        
         do {
             let data = try Data(contentsOf: url)
             completion(data)

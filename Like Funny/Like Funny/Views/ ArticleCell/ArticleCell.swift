@@ -11,33 +11,47 @@ import UIKit
 class ArticleCell: UITableViewCell {
 
     @IBOutlet weak var articleLabel: UILabel!
-    @IBOutlet weak var authurLabel: UILabel!
     @IBOutlet weak var displayedView: UIView!
+    @IBOutlet weak var saved: UIButton!
     
+    var sharingSwitchHandler: (() -> Void)?
+    var saveToCoreDataSwitchHandler: (() -> Void)?
+    var copyTextSwitchHandler: (() -> Void)?
+    
+    //TODO: Only for test
     var bool: Bool = false
     
-    @IBOutlet weak var Saved: UIButton!
     override func awakeFromNib() {
         super.awakeFromNib()
         
         displayedView.layer.cornerRadius = 8
         displayedView.layer.masksToBounds = true
         
-        Saved.imageView?.image = UIImage(named: "BlackStar95")
+        saved.imageView?.image = UIImage(named: "BlackStar95")
+        
+        resetContent()
     }
     
-    class var identifier: String {
-        return String(describing: self)
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        resetContent()
+    }
+    
+    func resetContent() {
+        articleLabel.text = nil 
+        saved.imageView?.image = UIImage(named: "WhiteStar95")
     }
     
     func commonInit(_ articleText: String) {
         articleLabel.text = articleText
     }
     
-    var sharingSwitchHandler: (() -> Void)?
-    var saveToCoreDataSwitchHandler: (() -> Void)?
-    var copyTextSwitchHandler: (() -> Void)?
-    
+    //TODO: Use in cellForRow
+    func setupSaveButton(isSaved: Bool) {
+        saved.imageView?.image = isSaved ? UIImage(named: "BlackStar95") : UIImage(named: "WhiteStar95")
+    }
+     
     @IBAction func shareText(_ sender: Any) {
         print("Sharing DATA")
         
@@ -46,7 +60,7 @@ class ArticleCell: UITableViewCell {
     
     @IBAction func saveData(_ sender: Any) {
         print("SAVING/REMOVING DATA")
-        Saved.setImage(UIImage(named: "BlackStar95"), for: .normal)
+        saved.setImage(UIImage(named: "BlackStar95"), for: .normal)
         saveToCoreDataSwitchHandler?()
     }
     @IBAction func copyText(_ sender: Any) {

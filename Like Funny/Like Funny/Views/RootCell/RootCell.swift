@@ -18,10 +18,6 @@ class RootCell: UITableViewCell {
         super.awakeFromNib()
     }
     
-    class var identifier: String {
-        return String(describing: self)
-    }
-    
     func commonInit(_ rootImg: String, categoryName: String, aroyImage: String) {
         rootImage.image = UIImage(named: rootImg)
         rootLabel.text = categoryName
