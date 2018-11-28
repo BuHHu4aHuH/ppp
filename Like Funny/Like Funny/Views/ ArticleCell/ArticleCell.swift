@@ -26,20 +26,12 @@ class ArticleCell: UITableViewCell {
         
         displayedView.layer.cornerRadius = 8
         displayedView.layer.masksToBounds = true
-        
-        saved.imageView?.image = UIImage(named: "BlackStar95")
-        
-        resetContent()
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        resetContent()
-    }
-    
-    func resetContent() {
-        articleLabel.text = nil 
+        articleLabel.text = nil
         saved.imageView?.image = UIImage(named: "WhiteStar95")
     }
     
@@ -48,10 +40,15 @@ class ArticleCell: UITableViewCell {
     }
     
     //TODO: Use in cellForRow
-    func setupSaveButton(isSaved: Bool) {
-        saved.imageView?.image = isSaved ? UIImage(named: "BlackStar95") : UIImage(named: "WhiteStar95")
-    }
-     
+//    func setupSaveButton(isSaved: Bool) {
+//        if isSaved {
+//            saved.imageView?.image = UIImage(named: "BlackStar95")
+//        } else {
+//            saved.imageView?.image = UIImage(named: "WhiteStar95")
+//        }
+//        //saved.imageView?.image = isSaved ? UIImage(named: "BlackStar95") : UIImage(named: "WhiteStar95")
+//    }
+    
     @IBAction func shareText(_ sender: Any) {
         print("Sharing DATA")
         
@@ -60,7 +57,7 @@ class ArticleCell: UITableViewCell {
     
     @IBAction func saveData(_ sender: Any) {
         print("SAVING/REMOVING DATA")
-        saved.setImage(UIImage(named: "BlackStar95"), for: .normal)
+        //saved.setImage(UIImage(named: "BlackStar95"), for: .normal)
         saveToCoreDataSwitchHandler?()
     }
     @IBAction func copyText(_ sender: Any) {

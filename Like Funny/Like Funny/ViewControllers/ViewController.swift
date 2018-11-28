@@ -12,8 +12,16 @@ import GoogleMobileAds
 
 //TODO: Move to singleton 
 var savedArticles = [Article]()
-//TODO: Rename
-var dictionary = [String: String]()
+
+struct categoriessss {
+    var name: String
+    var key: String?
+    
+    init?(name: String?, key: String?) { guard let name = name else { return nil}
+        self.name = name
+        self.key = key
+    }
+}
 
 class ViewController: UIViewController, GADBannerViewDelegate {
     
@@ -32,22 +40,25 @@ class ViewController: UIViewController, GADBannerViewDelegate {
     var childMass = [String]()
     var childKeyMass = [String]()
     
+    //var categoriesObject = categoriessss()
+    //var categoriesMasss = []()
+    var categoriesMasss: [categoriessss] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "BlackStar"), style: .plain, target: self, action: #selector(addTapped))
         
         categoriesMass = getData(category: "_root")
+        
+        self.categoriesMasss = categoriesMasss.sorted { $0.name > $1.name }
+        
         setupTableView()
         sorting()
-        
-        //TODO: add func
-        for (key, value) in dictionary {
-            objectArray.append(Objects(sectionName: key, sectionObjects: value))
-        }
-        
         setupBanner()
     }
+    
+    
     
     //Setup Banner
     
@@ -60,7 +71,7 @@ class ViewController: UIViewController, GADBannerViewDelegate {
         bannerView.load(GADRequest())
         bannerView.translatesAutoresizingMaskIntoConstraints = false
         bannerView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor).isActive = true
-       
+        
         let requestAD: GADRequest = GADRequest()
         requestAD.testDevices = [kGADSimulatorID]
         bannerView.load(requestAD)
@@ -93,29 +104,34 @@ class ViewController: UIViewController, GADBannerViewDelegate {
                 let decoder = JSONDecoder()
                 self.categories = try decoder.decode(Feed.self, from: data)
                 
-                
                 //TODO: Use guard let
                 if let dict = categories.categories {
                     
                     //TODO: Sort func
-                    //MARK: asdasd
                     for (k, v) in dict {
                         
                         //TODO: Use guard let
                         if let parent = v.parent, parent == category {
                             
-                            
                             if let name = v.name {
-                                categoriesMass.append(name)
-                                dictionary.updateValue(name, forKey: k)
+                                //categoriesMass.append(name)
+                                var elem = categoriessss(name: name, key: k)
+                                //                                elem.name = name
+                                //                                elem.key = k
+                                
+                                if let element = elem {
+                                    categoriesMasss.append(element)
+                                    
+                                }
+                                //                                categoriesObject.name = name
+                                //                                categoriesObject.key = k
                             }
-                            //dictionary[parent] = v.name
                             
-                            keyMass.append(k)
+                            //keyMass.append(k)
                             
-                            if (category != "_root") {
-                                childKeyMass.append(k)
-                            }
+                            //                            if (category != "_root") {
+                            //                                childKeyMass.append(k)
+                            //                            }
                         }
                     }
                 }
@@ -134,7 +150,7 @@ class ViewController: UIViewController, GADBannerViewDelegate {
         //dictionary = dictionary.sorted { $0.value < $1.value }
         //let sortedDictionary = dictionary.keys.sorted{dictionary[$0]! < dictionary[$1]!}
     }
-
+    
     //TODO: Move it + rename
     struct Objects {
         var sectionName: String!
@@ -158,7 +174,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categoriesMass.count
+        return categoriesMasss.count//categoriesMass.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -168,10 +184,10 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: RootCell.identifier, for: indexPath) as! RootCell
         
-        let data = categoriesMass[indexPath.row]
+        let data = categoriesMasss[indexPath.row]
         
-        cell.rootLabel?.text = data//objectArray[indexPath.item].sectionObjects
-        cell.rootImage.image = UIImage(named: keyMass[indexPath.item])//objectArray[indexPath.item].sectionName)
+        cell.rootLabel?.text = data.name
+        cell.rootImage.image = UIImage(named: data.key!)
         cell.arroyImage.image = UIImage(named: "arroy") //TODO: Rename
         
         return cell
@@ -179,7 +195,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        searchingCategories(categoryKey: keyMass[indexPath.item], category: categoriesMass[indexPath.item])
+        searchingCategories(categoryKey: categoriesMasss[indexPath.item].key!, category: categoriesMasss[indexPath.item].name)
     }
     
     //Searching Child Categories

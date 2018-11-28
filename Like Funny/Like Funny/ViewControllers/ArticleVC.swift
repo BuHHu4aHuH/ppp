@@ -158,6 +158,8 @@ extension ArticleVC: UITableViewDelegate, UITableViewDataSource {
         
         cell.articleLabel.text = textsArray[indexPath.item]
         
+        cell.saved.imageView?.image = UIImage(named: "WhiteStar95")
+
         cell.selectionStyle = .none
         
         cell.sharingSwitchHandler = { [weak self] in
@@ -175,7 +177,7 @@ extension ArticleVC: UITableViewDelegate, UITableViewDataSource {
             guard let `self` = self else { return }
             
             //TODO: Change this to setupSaveButton(isSaved: Bool)
-            cell.saved?.imageView?.image = UIImage(named: "BlackStar95")
+            cell.saved.setImage(UIImage(named: "BlackStar95"), for: .normal)
             
             let article = Article(context: PersistenceServce.context)
             article.article = self.textsArray[indexPath.item]

@@ -63,23 +63,17 @@ extension SavedArticlesController: UITableViewDelegate, UITableViewDataSource {
         
         cell.sharingSwitchHandler = { [weak self] in
             
-            //TODO: Use guard let `self` = self else { return }
-            guard self != nil else {
-                return
-            }
+            guard let `self` = self else { return }
             
             let textShare = savedArticles[indexPath.item].article
             let activityViewController = UIActivityViewController(activityItems: [textShare], applicationActivities: nil)
-            activityViewController.popoverPresentationController?.sourceView = self?.view
-            self?.present(activityViewController, animated: true, completion: nil)
+            activityViewController.popoverPresentationController?.sourceView = self.view
+            self.present(activityViewController, animated: true, completion: nil)
         }
         
         cell.saveToCoreDataSwitchHandler = { [weak self] in
             
-            //TODO: Use guard let `self` = self else { return }
-            guard self != nil else {
-                return
-            }
+            guard let `self` = self else { return }
             
             let article = savedArticles[indexPath.item]
             PersistenceServce.persistentContainer.viewContext.delete(article)
@@ -91,14 +85,11 @@ extension SavedArticlesController: UITableViewDelegate, UITableViewDataSource {
         
         cell.copyTextSwitchHandler = { [weak self] in
             
-            //TODO: Use guard let `self` = self else { return }
-            guard self != nil else {
-                return
-            }
+            guard let `self` = self else { return }
             
             UIPasteboard.general.string = savedArticles[indexPath.item].article
             
-            self!.createAlert(title: "Warning", message: "Here will be text soon...")
+            self.createAlert(title: "Warning", message: "Here will be text soon...")
             
         }
         return cell
