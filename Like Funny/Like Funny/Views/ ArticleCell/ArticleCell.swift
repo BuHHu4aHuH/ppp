@@ -24,8 +24,9 @@ class ArticleCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        displayedView.layer.cornerRadius = 8
         displayedView.layer.masksToBounds = true
+        displayedView.layer.cornerRadius = 8
+        
     }
     
     override func prepareForReuse() {
