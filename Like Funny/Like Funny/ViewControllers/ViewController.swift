@@ -10,19 +10,6 @@ import UIKit
 import CoreData
 import GoogleMobileAds
 
-//TODO: Move to singleton 
-var savedArticles = [Article]()
-
-struct categoriessss {
-    var name: String
-    var key: String?
-    
-    init?(name: String?, key: String?) { guard let name = name else { return nil}
-        self.name = name
-        self.key = key
-    }
-}
-
 class ViewController: UIViewController, GADBannerViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
@@ -34,31 +21,22 @@ class ViewController: UIViewController, GADBannerViewDelegate {
     var categories = Feed()
     
     var category: String?
-    var categoriesMass = [String]()
-    var keyMass = [String]()
     
-    var childMass = [String]()
-    var childKeyMass = [String]()
-    
-    //var categoriesObject = categoriessss()
-    //var categoriesMasss = []()
-    var categoriesMasss: [categoriessss] = []
+    var childMass: [WorkWithDataSingleton.categoriesModel] = []
+    var categoriesMass: [WorkWithDataSingleton.categoriesModel] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "BlackStar"), style: .plain, target: self, action: #selector(addTapped))
         
-        categoriesMass = getData(category: "_root")
+        categoriesMass =  getData(category: "_root")
         
-        self.categoriesMasss = categoriesMasss.sorted { $0.name > $1.name }
+        self.categoriesMass = categoriesMass.sorted { $0.name > $1.name }
         
         setupTableView()
-        sorting()
         setupBanner()
     }
-    
-    
     
     //Setup Banner
     
@@ -85,7 +63,7 @@ class ViewController: UIViewController, GADBannerViewDelegate {
         
         do {
             let article = try PersistenceServce.context.fetch(fetchRequest)
-            savedArticles = article
+            WorkWithDataSingleton.savedArticles = article
         } catch {
             print("Error in fetching CoreData")
         }
@@ -95,9 +73,8 @@ class ViewController: UIViewController, GADBannerViewDelegate {
     
     //Get Data
     
-    func getData(category: String) -> [String] {
-        
-        var categoriesMass = [String]()
+    func getData(category: String) -> [WorkWithDataSingleton.categoriesModel] {
+        var categoriesMass: [WorkWithDataSingleton.categoriesModel] = []
         
         DataService.getData { (data) in
             do {
@@ -114,24 +91,12 @@ class ViewController: UIViewController, GADBannerViewDelegate {
                         if let parent = v.parent, parent == category {
                             
                             if let name = v.name {
-                                //categoriesMass.append(name)
-                                var elem = categoriessss(name: name, key: k)
-                                //                                elem.name = name
-                                //                                elem.key = k
+                                let elem = WorkWithDataSingleton.categoriesModel(name: name, key: k)
                                 
                                 if let element = elem {
-                                    categoriesMasss.append(element)
-                                    
+                                    categoriesMass.append(element)
                                 }
-                                //                                categoriesObject.name = name
-                                //                                categoriesObject.key = k
                             }
-                            
-                            //keyMass.append(k)
-                            
-                            //                            if (category != "_root") {
-                            //                                childKeyMass.append(k)
-                            //                            }
                         }
                     }
                 }
@@ -143,24 +108,7 @@ class ViewController: UIViewController, GADBannerViewDelegate {
         
         return categoriesMass
     }
-    
-    //Func Sorting
-    
-    func sorting() {
-        //dictionary = dictionary.sorted { $0.value < $1.value }
-        //let sortedDictionary = dictionary.keys.sorted{dictionary[$0]! < dictionary[$1]!}
-    }
-    
-    //TODO: Move it + rename
-    struct Objects {
-        var sectionName: String!
-        var sectionObjects: String!
-    }
-    
-    var objectArray = [Objects]()
-    
 }
-
 
 //MARK: - TableView
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
@@ -174,7 +122,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categoriesMasss.count//categoriesMass.count
+        return categoriesMass.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -184,7 +132,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: RootCell.identifier, for: indexPath) as! RootCell
         
-        let data = categoriesMasss[indexPath.row]
+        let data = categoriesMass[indexPath.row]
         
         cell.rootLabel?.text = data.name
         cell.rootImage.image = UIImage(named: data.key!)
@@ -195,7 +143,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        searchingCategories(categoryKey: categoriesMasss[indexPath.item].key!, category: categoriesMasss[indexPath.item].name)
+        searchingCategories(categoryKey: categoriesMass[indexPath.item].key!, category: categoriesMass[indexPath.item].name)
     }
     
     //Searching Child Categories
@@ -203,30 +151,30 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func searchingCategories(categoryKey: String, category: String) {
         
         childMass = getData(category: categoryKey)
-        
+        self.childMass = childMass.sorted { $0.name > $1.name }
         if childMass.count != 0 {
-            //TODO: use identifier
-            let desVC = storyboard?.instantiateViewController(withIdentifier: "CategoriesVC") as! CategoriesVC
+            
+            let desVC = storyboard?.instantiateViewController(withIdentifier: CategoriesVC.identifier) as! CategoriesVC
             
             desVC.navigationTitle = category
             
-            desVC.categoriesMass = childMass
-            desVC.keyMass = childKeyMass
+            let names = childMass.map { $0.name }
+            let keys = childMass.map { $0.key }
+            
+            desVC.categoriesMass = names
+            desVC.keyMass = keys as! [String]
             
             self.navigationController?.pushViewController(desVC, animated: true)
             
             childMass.removeAll()
-            childKeyMass.removeAll()
         } else {
-            //TODO: use identifier
-            let desVC = storyboard?.instantiateViewController(withIdentifier: "ArticleVC") as! ArticleVC
+            let desVC = storyboard?.instantiateViewController(withIdentifier: ArticleVC.identifier) as! ArticleVC
             
             desVC.navigationTitle = category
             desVC.category = categoryKey
             
             self.navigationController?.pushViewController(desVC, animated: true)
             childMass.removeAll()
-            childKeyMass.removeAll()
         }
     }
 }

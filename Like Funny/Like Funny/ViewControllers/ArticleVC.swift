@@ -40,7 +40,7 @@ class ArticleVC: UIViewController {
         
         do {
             let article = try PersistenceServce.context.fetch(fetchRequest)
-            savedArticles = article
+            WorkWithDataSingleton.savedArticles = article
         } catch {
             
         }
@@ -182,7 +182,7 @@ extension ArticleVC: UITableViewDelegate, UITableViewDataSource {
             let article = Article(context: PersistenceServce.context)
             article.article = self.textsArray[indexPath.item]
             PersistenceServce.saveContext()
-            savedArticles.append(article)
+            WorkWithDataSingleton.savedArticles.append(article)
         }
         
         cell.copyTextSwitchHandler = { [weak self] in

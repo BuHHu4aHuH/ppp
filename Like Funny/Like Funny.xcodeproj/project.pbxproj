@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		42A8FA286DE8B5B5D6ECC7E9 /* Pods_Like_Funny.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D5910B293F5A28E165BECC /* Pods_Like_Funny.framework */; };
 		BF477DF121AF06A5003F1188 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF477DF021AF06A5003F1188 /* Extensions.swift */; };
+		BF477DF321AF6D7D003F1188 /* WorkWithDataSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF477DF221AF6D7D003F1188 /* WorkWithDataSingleton.swift */; };
 		BF9E6669218F3EB70017BE7D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9E6668218F3EB70017BE7D /* AppDelegate.swift */; };
 		BF9E666B218F3EB70017BE7D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9E666A218F3EB70017BE7D /* ViewController.swift */; };
 		BF9E666E218F3EB70017BE7D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF9E666C218F3EB70017BE7D /* Main.storyboard */; };
@@ -42,6 +43,7 @@
 		9E9C6C9A3357365EB61F40F5 /* Pods-Like Funny.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Like Funny.release.xcconfig"; path = "Pods/Target Support Files/Pods-Like Funny/Pods-Like Funny.release.xcconfig"; sourceTree = "<group>"; };
 		B7E03E52CCC17F83DE2C778F /* Pods-Like FunnyUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Like FunnyUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Like FunnyUITests/Pods-Like FunnyUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		BF477DF021AF06A5003F1188 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		BF477DF221AF6D7D003F1188 /* WorkWithDataSingleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkWithDataSingleton.swift; sourceTree = "<group>"; };
 		BF9E6665218F3EB60017BE7D /* Like Funny.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Like Funny.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF9E6668218F3EB70017BE7D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BF9E666A218F3EB70017BE7D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 				BFD4806921A9EF4400243DC4 /* PersistenceService.swift */,
 				BF9E66A7218F4BC40017BE7D /* DataService.swift */,
 				BF477DF021AF06A5003F1188 /* Extensions.swift */,
+				BF477DF221AF6D7D003F1188 /* WorkWithDataSingleton.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -324,6 +327,7 @@
 				BF9E66A6218F4B4D0017BE7D /* CategoryModel.swift in Sources */,
 				BF9E66A1218F4AD90017BE7D /* RootCell.swift in Sources */,
 				BF9E66A4218F4B2E0017BE7D /* FeedModel.swift in Sources */,
+				BF477DF321AF6D7D003F1188 /* WorkWithDataSingleton.swift in Sources */,
 				BFD4807021AA035E00243DC4 /* SavedArticlesController.swift in Sources */,
 				BFD4806A21A9EF4400243DC4 /* PersistenceService.swift in Sources */,
 				BFC9E34621A600BB00E3969A /* CategoriesChildVC.swift in Sources */,

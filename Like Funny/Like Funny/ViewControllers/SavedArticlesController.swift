@@ -49,14 +49,14 @@ extension SavedArticlesController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return savedArticles.count
+        return WorkWithDataSingleton.savedArticles.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: ArticleCell.identifier, for: indexPath) as! ArticleCell
         
-        cell.articleLabel.text = savedArticles[indexPath.item].article
+        cell.articleLabel.text = WorkWithDataSingleton.savedArticles[indexPath.item].article
         
         cell.selectionStyle = .none
         cell.saved.setImage(UIImage(named: "BlackStar95"), for: .normal)
@@ -65,7 +65,7 @@ extension SavedArticlesController: UITableViewDelegate, UITableViewDataSource {
             
             guard let `self` = self else { return }
             
-            let textShare = savedArticles[indexPath.item].article
+            let textShare = WorkWithDataSingleton.savedArticles[indexPath.item].article
             let activityViewController = UIActivityViewController(activityItems: [textShare], applicationActivities: nil)
             activityViewController.popoverPresentationController?.sourceView = self.view
             self.present(activityViewController, animated: true, completion: nil)
@@ -75,9 +75,9 @@ extension SavedArticlesController: UITableViewDelegate, UITableViewDataSource {
             
             guard let `self` = self else { return }
             
-            let article = savedArticles[indexPath.item]
+            let article = WorkWithDataSingleton.savedArticles[indexPath.item]
             PersistenceServce.persistentContainer.viewContext.delete(article)
-            savedArticles.remove(at: indexPath.item)
+            WorkWithDataSingleton.savedArticles.remove(at: indexPath.item)
             tableView.deleteRows(at: [indexPath], with: .fade)
             
             PersistenceServce.saveContext()
@@ -87,7 +87,7 @@ extension SavedArticlesController: UITableViewDelegate, UITableViewDataSource {
             
             guard let `self` = self else { return }
             
-            UIPasteboard.general.string = savedArticles[indexPath.item].article
+            UIPasteboard.general.string = WorkWithDataSingleton.savedArticles[indexPath.item].article
             
             self.createAlert(title: "Warning", message: "Here will be text soon...")
             

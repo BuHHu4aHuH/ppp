@@ -15,7 +15,6 @@ extension UIViewController {
     }
 }
 
-
 extension UITableViewCell {
     
     class var identifier: String {

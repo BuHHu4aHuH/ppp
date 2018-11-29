@@ -19,8 +19,7 @@ class CategoriesVC: UIViewController {
     var categoriesMass = [String]()
     var keyMass = [String]()
     
-    var childKeysMass = [String]()
-    var categoriesChildMass = [String]()
+    var childMass = [WorkWithDataSingleton.categoriesModel]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,8 +41,13 @@ class CategoriesVC: UIViewController {
                         
                         if let parent = v.parent {
                             if parent == category {
-                                if let name = v.name {  categoriesChildMass.append(name) }
-                                childKeysMass.append(k)
+                                if let name = v.name {
+                                    let elem = WorkWithDataSingleton.categoriesModel(name: name, key: k)
+                                    
+                                    if let element = elem {
+                                        childMass.append(element)
+                                    }
+                                }
                             }
                         }
                     }
@@ -97,28 +101,30 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     
     func searchingCategories(categoryKey: String, category: String) {
         getData(category: categoryKey)
+        self.childMass = childMass.sorted { $0.name > $1.name }
         
-        if categoriesChildMass.count != 0 {
-            let desVC = storyboard?.instantiateViewController(withIdentifier: "CategoriesChildVC") as! CategoriesChildVC
+        if childMass.count != 0 {
+            let desVC = storyboard?.instantiateViewController(withIdentifier: CategoriesChildVC.identifier) as! CategoriesChildVC
+            
+            let names = childMass.map { $0.name }
+            let keys = childMass.map { $0.key }
             
             desVC.navigationTitle = category
-            desVC.categoriesMass = categoriesChildMass
-            desVC.keyMass = childKeysMass
+            desVC.categoriesMass = names
+            desVC.keyMass = keys as! [String]
             
             self.navigationController?.pushViewController(desVC, animated: true)
             
-            categoriesChildMass.removeAll()
-            childKeysMass.removeAll()
+            childMass.removeAll()
         } else {
-            let desVC = storyboard?.instantiateViewController(withIdentifier: "ArticleVC") as! ArticleVC
+            let desVC = storyboard?.instantiateViewController(withIdentifier: ArticleVC.identifier) as! ArticleVC
             
             desVC.navigationTitle = category
             desVC.category = categoryKey
             
             self.navigationController?.pushViewController(desVC, animated: true)
             
-            categoriesChildMass.removeAll()
-            childKeysMass.removeAll()
+            childMass.removeAll()
         }
     }
 }
