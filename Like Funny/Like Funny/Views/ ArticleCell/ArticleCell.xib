@@ -144,7 +144,7 @@
     <resources>
         <image name="Copy95" width="95" height="95"/>
         <image name="Share" width="100" height="100"/>
-        <image name="WhiteStar95" width="95" height="92"/>
+        <image name="WhiteStar95" width="409.60000610351562" height="409.60000610351562"/>
         <image name="black" width="480" height="360"/>
         <image name="logo" width="440" height="124"/>
     </resources>

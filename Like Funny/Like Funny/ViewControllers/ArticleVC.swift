@@ -26,7 +26,7 @@ class ArticleVC: UIViewController {
         
         //TODO: add func setupNavBar()
         self.navigationItem.title = navigationTitle
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "BlackStar95"), style: .plain, target: self, action: #selector(addTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "Favorite"), style: .plain, target: self, action: #selector(addTapped))
         
         fetchRequest()
         getData()
@@ -156,10 +156,16 @@ extension ArticleVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ArticleCell.identifier, for: indexPath) as! ArticleCell
         
+        cell.prepareForReuse()
+        
         cell.articleLabel.text = textsArray[indexPath.item]
         
-        cell.saved.imageView?.image = UIImage(named: "WhiteStar95")
-
+        if cell.saved.imageView?.image == UIImage(named: "BlackStar95") {
+            cell.saved.imageView?.image = UIImage(named: "WhiteStar95")
+        } else {
+            cell.saved.imageView?.image = UIImage(named: "WhiteStar95")
+        }
+        
         cell.selectionStyle = .none
         
         cell.sharingSwitchHandler = { [weak self] in
@@ -178,6 +184,8 @@ extension ArticleVC: UITableViewDelegate, UITableViewDataSource {
             
             //TODO: Change this to setupSaveButton(isSaved: Bool)
             cell.saved.setImage(UIImage(named: "BlackStar95"), for: .normal)
+            
+            
             
             let article = Article(context: PersistenceServce.context)
             article.article = self.textsArray[indexPath.item]

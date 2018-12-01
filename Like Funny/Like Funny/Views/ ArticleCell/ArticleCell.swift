@@ -18,15 +18,11 @@ class ArticleCell: UITableViewCell {
     var saveToCoreDataSwitchHandler: (() -> Void)?
     var copyTextSwitchHandler: (() -> Void)?
     
-    //TODO: Only for test
-    var bool: Bool = false
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         
         displayedView.layer.masksToBounds = true
         displayedView.layer.cornerRadius = 8
-        
     }
     
     override func prepareForReuse() {
@@ -58,7 +54,7 @@ class ArticleCell: UITableViewCell {
     
     @IBAction func saveData(_ sender: Any) {
         print("SAVING/REMOVING DATA")
-        //saved.setImage(UIImage(named: "BlackStar95"), for: .normal)
+        
         saveToCoreDataSwitchHandler?()
     }
     @IBAction func copyText(_ sender: Any) {
