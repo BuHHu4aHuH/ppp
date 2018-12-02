@@ -59,6 +59,7 @@ extension SavedArticlesController: UITableViewDelegate, UITableViewDataSource {
         cell.articleLabel.text = WorkWithDataSingleton.savedArticles[indexPath.item].article
         
         cell.selectionStyle = .none
+        
         cell.saved.setImage(UIImage(named: "BlackStar95"), for: .normal)
         
         cell.sharingSwitchHandler = { [weak self] in

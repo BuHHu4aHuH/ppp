@@ -87,14 +87,14 @@ class ArticleVC: UIViewController {
                                             if let data = dataDict?.data {
                                                 if let zero = data.zero {
                                                     if let value = zero.value {
-                                                        let cleanValue = value.replacingOccurrences(of: "<[^>]+>", with: "\n", options: .regularExpression, range: nil)
-                                                        let cleaningSecond = cleanValue.replacingOccurrences(of: "&#39;", with: "'", options: .regularExpression, range: nil)
-                                                        let cleaningThird = cleaningSecond.replacingOccurrences(of: "&nbsp;", with: "", options: .regularExpression, range: nil)
-                                                        let cleaningForth = cleaningThird.replacingOccurrences(of: "&quot;", with: "\"" , options: .regularExpression, range: nil)
-                                                        let cleaningFifth = cleaningForth.replacingOccurrences(of: "&mdash;", with: "-", options: .regularExpression, range: nil)
-                                                        let cleaningSixth = cleaningFifth.replacingOccurrences(of: "&ndash;", with: "-", options: .regularExpression, range: nil)
-                                                        let cleaningSeventh = cleaningSixth.replacingOccurrences(of: "&rsquo;", with: "’", options: .regularExpression, range: nil)
-                                                        textsArray.append(cleaningSeventh)
+                                                        var cleanValue = value.replacingOccurrences(of: "<[^>]+>", with: "\n", options: .regularExpression, range: nil)
+                                                        cleanValue = cleanValue.replacingOccurrences(of: "&#39;", with: "'", options: .regularExpression, range: nil)
+                                                        cleanValue = cleanValue.replacingOccurrences(of: "&nbsp;", with: "", options: .regularExpression, range: nil)
+                                                        cleanValue = cleanValue.replacingOccurrences(of: "&quot;", with: "\"" , options: .regularExpression, range: nil)
+                                                        cleanValue = cleanValue.replacingOccurrences(of: "&mdash;", with: "-", options: .regularExpression, range: nil)
+                                                        cleanValue = cleanValue.replacingOccurrences(of: "&ndash;", with: "-", options: .regularExpression, range: nil)
+                                                        cleanValue = cleanValue.replacingOccurrences(of: "&rsquo;", with: "’", options: .regularExpression, range: nil)
+                                                        textsArray.append(cleanValue)
                                                     }
                                                 }
                                             }
@@ -160,12 +160,23 @@ extension ArticleVC: UITableViewDelegate, UITableViewDataSource {
         
         cell.articleLabel.text = textsArray[indexPath.item]
         
-        if cell.saved.imageView?.image == UIImage(named: "BlackStar95") {
-            cell.saved.imageView?.image = UIImage(named: "WhiteStar95")
-        } else {
-            cell.saved.imageView?.image = UIImage(named: "WhiteStar95")
-        }
+        let image = cell.setupSaveButton(isSaved: false)
+        cell.saved.setImage(image, for: .normal)
         
+        let amountOfSavedArticles = WorkWithDataSingleton.savedArticles.count
+        var i = 0
+        
+        if amountOfSavedArticles == 0 {
+            print("nothing saved")
+        } else {
+            repeat {
+                if cell.articleLabel.text == WorkWithDataSingleton.savedArticles[i].article {
+                    let image = cell.setupSaveButton(isSaved: true)
+                    cell.saved.setImage(image, for: .normal)
+                }
+                i = i + 1
+            } while i < amountOfSavedArticles
+        }
         cell.selectionStyle = .none
         
         cell.sharingSwitchHandler = { [weak self] in
@@ -182,15 +193,25 @@ extension ArticleVC: UITableViewDelegate, UITableViewDataSource {
             
             guard let `self` = self else { return }
             
-            //TODO: Change this to setupSaveButton(isSaved: Bool)
-            cell.saved.setImage(UIImage(named: "BlackStar95"), for: .normal)
+            var imageForButton: UIImage
             
+            if cell.saved.imageView?.image == UIImage(named: "BlackStar95") {
+                imageForButton = cell.setupSaveButton(isSaved: false)
+                cell.saved.setImage(imageForButton, for: .normal)
+                
+//                let article = WorkWithDataSingleton.savedArticles[indexPath.item]
+//                PersistenceServce.persistentContainer.viewContext.delete(article)
+//                WorkWithDataSingleton.savedArticles.remove(at: indexPath.item)
+            } else {
+                imageForButton = cell.setupSaveButton(isSaved: true)
+                cell.saved.setImage(imageForButton, for: .normal)
+                
+                let article = Article(context: PersistenceServce.context)
+                article.article = self.textsArray[indexPath.item]
+                PersistenceServce.saveContext()
+                WorkWithDataSingleton.savedArticles.append(article)
+            }
             
-            
-            let article = Article(context: PersistenceServce.context)
-            article.article = self.textsArray[indexPath.item]
-            PersistenceServce.saveContext()
-            WorkWithDataSingleton.savedArticles.append(article)
         }
         
         cell.copyTextSwitchHandler = { [weak self] in

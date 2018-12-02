@@ -37,14 +37,14 @@ class ArticleCell: UITableViewCell {
     }
     
     //TODO: Use in cellForRow
-//    func setupSaveButton(isSaved: Bool) {
-//        if isSaved {
-//            saved.imageView?.image = UIImage(named: "BlackStar95")
-//        } else {
-//            saved.imageView?.image = UIImage(named: "WhiteStar95")
-//        }
-//        //saved.imageView?.image = isSaved ? UIImage(named: "BlackStar95") : UIImage(named: "WhiteStar95")
-//    }
+    func setupSaveButton(isSaved: Bool) -> UIImage {
+        if isSaved {
+            return UIImage(named: "BlackStar95")!
+        } else {
+            return UIImage(named: "WhiteStar95")!
+        }
+        //saved.imageView?.image = isSaved ? UIImage(named: "BlackStar95") : UIImage(named: "WhiteStar95")
+    }
     
     @IBAction func shareText(_ sender: Any) {
         print("Sharing DATA")

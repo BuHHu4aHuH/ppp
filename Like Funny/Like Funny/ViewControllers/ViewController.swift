@@ -149,25 +149,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     //Searching Child Categories
     
     func searchingCategories(categoryKey: String, category: String) {
-        
-        childMass = getData(category: categoryKey)
-        self.childMass = childMass.sorted { $0.name > $1.name }
-        if childMass.count != 0 {
-            
-            let desVC = storyboard?.instantiateViewController(withIdentifier: CategoriesVC.identifier) as! CategoriesVC
-            
-            desVC.navigationTitle = category
-            
-            let names = childMass.map { $0.name }
-            let keys = childMass.map { $0.key }
-            
-            desVC.categoriesMass = names
-            desVC.keyMass = keys as! [String]
-            
-            self.navigationController?.pushViewController(desVC, animated: true)
-            
-            childMass.removeAll()
-        } else {
+        if categoryKey == "ukrajinski-privitannya" {
             let desVC = storyboard?.instantiateViewController(withIdentifier: ArticleVC.identifier) as! ArticleVC
             
             desVC.navigationTitle = category
@@ -175,6 +157,33 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             
             self.navigationController?.pushViewController(desVC, animated: true)
             childMass.removeAll()
+        } else {
+            childMass = getData(category: categoryKey)
+            self.childMass = childMass.sorted { $0.name > $1.name }
+            if childMass.count != 0 {
+                
+                let desVC = storyboard?.instantiateViewController(withIdentifier: CategoriesVC.identifier) as! CategoriesVC
+                
+                desVC.navigationTitle = category
+                
+                let names = childMass.map { $0.name }
+                let keys = childMass.map { $0.key }
+                
+                desVC.categoriesMass = names
+                desVC.keyMass = keys as! [String]
+                
+                self.navigationController?.pushViewController(desVC, animated: true)
+                
+                childMass.removeAll()
+            } else {
+                let desVC = storyboard?.instantiateViewController(withIdentifier: ArticleVC.identifier) as! ArticleVC
+                
+                desVC.navigationTitle = category
+                desVC.category = categoryKey
+                
+                self.navigationController?.pushViewController(desVC, animated: true)
+                childMass.removeAll()
+            }
         }
     }
 }

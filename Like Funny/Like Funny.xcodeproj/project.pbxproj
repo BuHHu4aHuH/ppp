@@ -27,7 +27,6 @@
 		BFC9E33D21A01A9A00E3969A /* ArticleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC9E33B21A01A9A00E3969A /* ArticleCell.swift */; };
 		BFC9E33E21A01A9A00E3969A /* ArticleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFC9E33C21A01A9A00E3969A /* ArticleCell.xib */; };
 		BFC9E34221A01B9D00E3969A /* ArticleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC9E34121A01B9D00E3969A /* ArticleVC.swift */; };
-		BFC9E34421A3125700E3969A /* pozdravleniya.json in Resources */ = {isa = PBXBuildFile; fileRef = BFC9E34321A3125700E3969A /* pozdravleniya.json */; };
 		BFC9E34621A600BB00E3969A /* CategoriesChildVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC9E34521A600BB00E3969A /* CategoriesChildVC.swift */; };
 		BFD4806A21A9EF4400243DC4 /* PersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD4806921A9EF4400243DC4 /* PersistenceService.swift */; };
 		BFD4806D21A9F46000243DC4 /* Article+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD4806B21A9F46000243DC4 /* Article+CoreDataClass.swift */; };
@@ -63,7 +62,6 @@
 		BFC9E33B21A01A9A00E3969A /* ArticleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleCell.swift; sourceTree = "<group>"; };
 		BFC9E33C21A01A9A00E3969A /* ArticleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ArticleCell.xib; sourceTree = "<group>"; };
 		BFC9E34121A01B9D00E3969A /* ArticleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleVC.swift; sourceTree = "<group>"; };
-		BFC9E34321A3125700E3969A /* pozdravleniya.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = pozdravleniya.json; sourceTree = "<group>"; };
 		BFC9E34521A600BB00E3969A /* CategoriesChildVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesChildVC.swift; sourceTree = "<group>"; };
 		BFD4806921A9EF4400243DC4 /* PersistenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceService.swift; sourceTree = "<group>"; };
 		BFD4806B21A9F46000243DC4 /* Article+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Article+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -139,7 +137,6 @@
 		BF9E6667218F3EB60017BE7D /* Like Funny */ = {
 			isa = PBXGroup;
 			children = (
-				BFC9E34321A3125700E3969A /* pozdravleniya.json */,
 				BF9E6668218F3EB70017BE7D /* AppDelegate.swift */,
 				BF9E669B218F485C0017BE7D /* Models */,
 				BF9E669C218F48640017BE7D /* Views */,
@@ -285,7 +282,6 @@
 			files = (
 				BF9E6676218F3EB70017BE7D /* LaunchScreen.storyboard in Resources */,
 				BF9E66B92194EC590017BE7D /* CategoryCell.xib in Resources */,
-				BFC9E34421A3125700E3969A /* pozdravleniya.json in Resources */,
 				BF9E66A2218F4AD90017BE7D /* RootCell.xib in Resources */,
 				BF9E6673218F3EB70017BE7D /* Assets.xcassets in Resources */,
 				BFC9E33E21A01A9A00E3969A /* ArticleCell.xib in Resources */,
