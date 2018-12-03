@@ -19,11 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="999" verticalHuggingPriority="999" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" image="Glavna" translatesAutoresizingMaskIntoConstraints="NO" id="B16-LB-XZ0">
-                                <rect key="frame" x="67.5" y="213.5" width="240" height="240"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="240" id="ltq-D6-1nZ"/>
-                                    <constraint firstAttribute="height" constant="240" id="tR5-zP-L36"/>
-                                </constraints>
+                                <rect key="frame" x="-206" y="-164" width="787" height="995"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
