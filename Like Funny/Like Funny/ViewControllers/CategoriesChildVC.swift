@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SQLite
 
 class CategoriesChildVC: UIViewController  {
     
@@ -15,15 +16,83 @@ class CategoriesChildVC: UIViewController  {
     var navigationTitle: String?
     let tableViewCellHeight: Int = 70
     
-    var categoriesMass = [String]()
-    var keyMass = [String]()
+    var categoriesMass = [WorkWithDataSingleton.categoriesModel]()
+    var categoryKey: String?
+    
+    var database: Connection!
+    
+    let categoriesTable = Table("categoties")
+    let id = Expression<Int>("id")
+    let parentOfCategory = Expression<String>("categories")
+    let keyOfCategory = Expression<String>("key")
+    let name = Expression<String>("name")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationItem.title = navigationTitle
         
+        do {
+            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            let fileUrl = documentDirectory.appendingPathComponent("categories").appendingPathExtension("sqlite3")
+            let database = try Connection(fileUrl.path)
+            self.database = database
+        } catch {
+            print(error)
+        }
+        
+        createTable()
+        
+        categoriesMass = readingData(categorySearching: categoryKey!)
+        
+        self.categoriesMass = categoriesMass.sorted { $0.name > $1.name }
+        
         setupTableView()
+    }
+    
+    //Create DB
+    
+    func createTable() {
+        print("CREATE TABLE")
+        
+        let createTable = self.categoriesTable.create { (table) in
+            table.column(self.id, primaryKey: true)
+            table.column(self.parentOfCategory)
+            table.column(self.keyOfCategory)
+            table.column(self.name)
+            
+        }
+        
+        do {
+            try self.database.run(createTable)
+            print("CREATED TABLE")
+        } catch {
+            print(error)
+        }
+    }
+    
+    //ReadData from SQLite
+    
+    func readingData(categorySearching: String) -> [WorkWithDataSingleton.categoriesModel] {
+        var categoriesModel: [WorkWithDataSingleton.categoriesModel] = []
+        
+        do {
+            let categories = try self.database.prepare(self.categoriesTable)
+            for category in categories {
+                if category[self.parentOfCategory] == categorySearching {
+                    let elem = WorkWithDataSingleton.categoriesModel(name: category[self.name], key: category[self.keyOfCategory])
+                    
+                    if let element = elem {
+                        categoriesModel.append(element)
+                    }
+                }
+            }
+            
+        } catch {
+            print(error)
+        }
+        
+        return categoriesModel
     }
 }
 
@@ -48,7 +117,7 @@ extension CategoriesChildVC: UITableViewDelegate, UITableViewDataSource {
         
         let data = categoriesMass[indexPath.row]
         
-        cell.txtLabel?.text = data
+        cell.txtLabel?.text = data.name
         cell.arroyImage.image = UIImage(named: "arroy")
         
         return cell
@@ -59,8 +128,8 @@ extension CategoriesChildVC: UITableViewDelegate, UITableViewDataSource {
         
         let desVC = storyboard?.instantiateViewController(withIdentifier: "ArticleVC") as! ArticleVC
         
-        desVC.navigationTitle = categoriesMass[indexPath.item]
-        desVC.category = keyMass[indexPath.item]
+        desVC.navigationTitle = categoriesMass[indexPath.item].name
+        desVC.category = categoriesMass[indexPath.item].key
         
         self.navigationController?.pushViewController(desVC, animated: true)
     }

@@ -9,33 +9,75 @@
 import UIKit
 import CoreData
 import GoogleMobileAds
+import SQLite
 
 class ViewController: UIViewController, GADBannerViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
-    
-    var bannerView: GADBannerView!
-    
     let tableViewCellHeight: Int = 70
+    var bannerView: GADBannerView!
     
     var categories = Feed()
     
-    var category: String?
+    var database: Connection!
     
-    var childMass: [WorkWithDataSingleton.categoriesModel] = []
+    let categoriesTable = Table("categoties")
+    let id = Expression<Int>("id")
+    let parentOfCategory = Expression<String>("categories")
+    let keyOfCategory = Expression<String>("key")
+    let name = Expression<String>("name")
+    
+    var rootCategoriesName = [String]()
+    var rootCategoriesKeys = [String]()
+    
     var categoriesMass: [WorkWithDataSingleton.categoriesModel] = []
+    var childCategoriesMass: [WorkWithDataSingleton.categoriesModel] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "Favorite"), style: .plain, target: self, action: #selector(addTapped))
         
-        categoriesMass =  getData(category: "_root")
+        do {
+            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            let fileUrl = documentDirectory.appendingPathComponent("categories").appendingPathExtension("sqlite3")
+            let database = try Connection(fileUrl.path)
+            self.database = database
+        } catch {
+            print(error)
+        }
+        
+        createTable()
+        
+        getData()
+        
+        categoriesMass = readingData(categorySearching: "_root")
         
         self.categoriesMass = categoriesMass.sorted { $0.name > $1.name }
         
         setupTableView()
         setupBanner()
+    }
+    
+    //Create DB
+    
+    func createTable() {
+        print("CREATE TABLE")
+        
+        let createTable = self.categoriesTable.create { (table) in
+            table.column(self.id, primaryKey: true)
+            table.column(self.parentOfCategory)
+            table.column(self.keyOfCategory)//, unique: true)
+            table.column(self.name)
+            
+        }
+        
+        do {
+            try self.database.run(createTable)
+            print("CREATED TABLE")
+        } catch {
+            print(error)
+        }
     }
     
     //Setup Banner
@@ -73,9 +115,7 @@ class ViewController: UIViewController, GADBannerViewDelegate {
     
     //Get Data
     
-    func getData(category: String) -> [WorkWithDataSingleton.categoriesModel] {
-        var categoriesMass: [WorkWithDataSingleton.categoriesModel] = []
-        
+    func getData() {
         DataService.getData { (data) in
             do {
                 let decoder = JSONDecoder()
@@ -88,14 +128,22 @@ class ViewController: UIViewController, GADBannerViewDelegate {
                     for (k, v) in dict {
                         
                         //TODO: Use guard let
-                        if let parent = v.parent, parent == category {
+                        if let parent = v.parent {
                             
                             if let name = v.name {
-                                let elem = WorkWithDataSingleton.categoriesModel(name: name, key: k)
-                                
-                                if let element = elem {
-                                    categoriesMass.append(element)
+                                let insertCategory = self.categoriesTable.insert(self.name <- name, self.parentOfCategory <- parent, self.keyOfCategory <- k)
+                                do {
+                                    try self.database.run(insertCategory)
+                                    print("INSERTED CATEGORY")
+                                } catch {
+                                    print(error)
                                 }
+                                
+                                if parent == "_root" {
+                                    rootCategoriesKeys.append(k)
+                                    rootCategoriesName.append(name)
+                                }
+                                
                             }
                         }
                     }
@@ -105,9 +153,32 @@ class ViewController: UIViewController, GADBannerViewDelegate {
                 print("ERROR:", error)
             }
         }
-        
-        return categoriesMass
     }
+    
+    //ReadData from SQLite
+    
+    func readingData(categorySearching: String) -> [WorkWithDataSingleton.categoriesModel] {
+        var categoriesModel: [WorkWithDataSingleton.categoriesModel] = []
+        
+        do {
+            let categories = try self.database.prepare(self.categoriesTable)
+            for category in categories {
+                if category[self.parentOfCategory] == categorySearching {
+                    let elem = WorkWithDataSingleton.categoriesModel(name: category[self.name], key: category[self.keyOfCategory])
+                    
+                    if let element = elem {
+                        categoriesModel.append(element)
+                    }
+                }
+            }
+            
+        } catch {
+            print(error)
+        }
+        
+        return categoriesModel
+    }
+    
 }
 
 //MARK: - TableView
@@ -143,47 +214,23 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        searchingCategories(categoryKey: categoriesMass[indexPath.item].key!, category: categoriesMass[indexPath.item].name)
-    }
-    
-    //Searching Child Categories
-    
-    func searchingCategories(categoryKey: String, category: String) {
-        if categoryKey == "ukrajinski-privitannya" {
+        
+        if categoriesMass[indexPath.item].key == "ukrajinski-privitannya" {
             let desVC = storyboard?.instantiateViewController(withIdentifier: ArticleVC.identifier) as! ArticleVC
             
-            desVC.navigationTitle = category
-            desVC.category = categoryKey
+            desVC.navigationTitle = categoriesMass[indexPath.item].name
+            desVC.category = categoriesMass[indexPath.item].key
             
             self.navigationController?.pushViewController(desVC, animated: true)
-            childMass.removeAll()
         } else {
-            childMass = getData(category: categoryKey)
-            self.childMass = childMass.sorted { $0.name > $1.name }
-            if childMass.count != 0 {
-                
-                let desVC = storyboard?.instantiateViewController(withIdentifier: CategoriesVC.identifier) as! CategoriesVC
-                
-                desVC.navigationTitle = category
-                
-                let names = childMass.map { $0.name }
-                let keys = childMass.map { $0.key }
-                
-                desVC.categoriesMass = names
-                desVC.keyMass = keys as! [String]
-                
-                self.navigationController?.pushViewController(desVC, animated: true)
-                
-                childMass.removeAll()
-            } else {
-                let desVC = storyboard?.instantiateViewController(withIdentifier: ArticleVC.identifier) as! ArticleVC
-                
-                desVC.navigationTitle = category
-                desVC.category = categoryKey
-                
-                self.navigationController?.pushViewController(desVC, animated: true)
-                childMass.removeAll()
-            }
+            let desVC = storyboard?.instantiateViewController(withIdentifier: CategoriesVC.identifier) as! CategoriesVC
+            
+            childCategoriesMass = readingData(categorySearching: categoriesMass[indexPath.item].key!)
+            
+            desVC.navigationTitle = categoriesMass[indexPath.item].name
+            desVC.categoryKey = categoriesMass[indexPath.item].key
+            
+            self.navigationController?.pushViewController(desVC, animated: true)
         }
     }
 }

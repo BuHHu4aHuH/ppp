@@ -21,4 +21,5 @@ class WorkWithDataSingleton {
             self.key = key
         }
     }
+    
 }
