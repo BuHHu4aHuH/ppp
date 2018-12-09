@@ -29,20 +29,6 @@ class CategoriesChildVC: UIViewController  {
     let parentCategoriesTable = Expression<String>("parent")
     let keyCategoriesTable = Expression<String>("key")
     
-    
-    var articleDatabase: Connection!
-    
-    let articleTable = Table("article")
-    let idArticleTable = Expression<Int>("id")
-    let textArticleTable = Expression<String>("text")
-    let articleKey = Expression<String>("key")
-    
-    var categoriesArticleDatabase: Connection!
-    
-    let categoriesArticleTable = Table("categoriesArticle")
-    let categoryKey = Expression<String>("key")
-    let articleId = Expression<Int>("articleId")
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -69,26 +55,6 @@ class CategoriesChildVC: UIViewController  {
         } catch {
             print(error)
         }
-        
-        
-        do {
-            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            let fileUrl = documentDirectory.appendingPathComponent("article").appendingPathExtension("sqlite3")
-            let database = try Connection(fileUrl.path)
-            self.articleDatabase = database
-        } catch {
-            print(error)
-        }
-        
-        do {
-            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            let fileUrl = documentDirectory.appendingPathComponent("categoriesArticle").appendingPathExtension("sqlite3")
-            let database = try Connection(fileUrl.path)
-            self.categoriesArticleDatabase = database
-        } catch {
-            print(error)
-        }
-        
     }
     
     //Create DB
@@ -108,35 +74,6 @@ class CategoriesChildVC: UIViewController  {
         do {
             try self.categoriesDatabase.run(createCategoriesTable)
             print("CREATED CATEGORIES TABLE")
-        } catch {
-            print(error)
-        }
-        
-        //ArticleTable
-        
-        let createArticleTable = self.articleTable.create { (table) in
-            table.column(self.idArticleTable, primaryKey: true)
-            table.column(self.textArticleTable)
-            table.column(self.articleKey)
-        }
-        
-        do {
-            try self.articleDatabase.run(createArticleTable)
-            print("CREATED ARTICLE TABLE")
-        } catch {
-            print(error)
-        }
-        
-        //CategoriesArticleTable
-        
-        let createCategoriesArticleTable = self.categoriesArticleTable.create { (table) in
-            table.column(self.categoryKey)
-            table.column(self.articleId)
-        }
-        
-        do {
-            try self.categoriesArticleDatabase.run(createCategoriesArticleTable)
-            print("CREATED CATEGORIESARTICLE TABLE")
         } catch {
             print(error)
         }

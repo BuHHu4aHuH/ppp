@@ -15,25 +15,13 @@ class ArticleVC: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     let tableViewCellHeight: Int = 150
-    
     var navigationTitle: String?
-    
-    var articlesAmount = 0
     
     var category: String?
     var categoriesMass = Feed()
     var textsArray = [String]()
     
     //SQLite Database
-    
-    var categoriesDatabase: Connection!
-    
-    let categoriesTable = Table("categories")
-    let idCategoriesTable = Expression<Int>("id")
-    let nameCategoriesTable = Expression<String>("name")
-    let parentCategoriesTable = Expression<String>("parent")
-    let keyCategoriesTable = Expression<String>("key")
-    
     
     var articleDatabase: Connection!
     
@@ -43,49 +31,32 @@ class ArticleVC: UIViewController {
     let articleKey = Expression<String>("key")
     let isSaved = Expression<Bool>("isSaved")
     
-    
-    var categoriesArticleDatabase: Connection!
-    
-    let categoriesArticleTable = Table("categoriesArticle")
-    let categoryKey = Expression<String>("key")
-    let articleId = Expression<Int>("articleId")
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        reloadTableWithAnimation()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //TODO: add func setupNavBar()
-        self.navigationItem.title = navigationTitle
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "Favorite"), style: .plain, target: self, action: #selector(addTapped))
+        setupNavigationBar()
         
         setupTables()
         createTables()
         
-        //getData()
-        
         textsArray = readingData(categorySearching: category!)
         
-        print("SSSSSSSEEEEEEEEAAAAAARRRRRRRCCCCCCHHHHHHH")
-        print(category)
-        print(textsArray.count)
-        print("lol")
-        print("articlesAmount: \(articlesAmount)")
-        print("lol")
-        
         fetchRequest()
-        //getData()
         setupTableView()
     }
     
+    func setupNavigationBar() {
+        self.navigationItem.title = navigationTitle
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "Favorite"), style: .plain, target: self, action: #selector(addTapped))
+    }
+    
     func setupTables() {
-        do {
-            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            let fileUrl = documentDirectory.appendingPathComponent("categories").appendingPathExtension("sqlite3")
-            let database = try Connection(fileUrl.path)
-            self.categoriesDatabase = database
-        } catch {
-            print(error)
-        }
-        
         
         do {
             let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
@@ -95,38 +66,12 @@ class ArticleVC: UIViewController {
         } catch {
             print(error)
         }
-        
-        do {
-            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            let fileUrl = documentDirectory.appendingPathComponent("categoriesArticle").appendingPathExtension("sqlite3")
-            let database = try Connection(fileUrl.path)
-            self.categoriesArticleDatabase = database
-        } catch {
-            print(error)
-        }
-        
     }
     
     //Create DB
     
     func createTables() {
         print("CREATE TABLE")
-        
-        //CategoriesTable
-        
-        let createCategoriesTable = self.categoriesTable.create { (table) in
-            table.column(self.idCategoriesTable, primaryKey: true)
-            table.column(self.parentCategoriesTable)
-            table.column(self.keyCategoriesTable)
-            table.column(self.nameCategoriesTable)
-        }
-        
-        do {
-            try self.categoriesDatabase.run(createCategoriesTable)
-            print("CREATED CATEGORIES TABLE")
-        } catch {
-            print(error)
-        }
         
         //ArticleTable
         
@@ -140,20 +85,6 @@ class ArticleVC: UIViewController {
         do {
             try self.articleDatabase.run(createArticleTable)
             print("CREATED ARTICLE TABLE")
-        } catch {
-            print(error)
-        }
-        
-        //CategoriesArticleTable
-        
-        let createCategoriesArticleTable = self.categoriesArticleTable.create { (table) in
-            table.column(self.categoryKey, primaryKey: true)
-            table.column(self.articleId, primaryKey: true)
-        }
-        
-        do {
-            try self.categoriesArticleDatabase.run(createCategoriesArticleTable)
-            print("CREATED CATEGORIESARTICLE TABLE")
         } catch {
             print(error)
         }
@@ -186,8 +117,7 @@ class ArticleVC: UIViewController {
         textsArray.removeAll()
     }
     
-    
-   //Alert
+    //Alert
     
     func createAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -207,7 +137,6 @@ class ArticleVC: UIViewController {
                 if article[self.articleKey] == categorySearching {
                     categoriesModel.append(article[self.textArticleTable])
                 }
-                articlesAmount = articlesAmount + 1
             }
             
         } catch {
@@ -256,20 +185,13 @@ extension ArticleVC: UITableViewDelegate, UITableViewDataSource {
         let image = cell.setupSaveButton(isSaved: false)
         cell.saved.setImage(image, for: .normal)
         
-        let amountOfSavedArticles = WorkWithDataSingleton.savedArticles.count
-        var i = 0
-        
-        if amountOfSavedArticles == 0 {
-            print("nothing saved")
-        } else {
-            repeat {
-                if cell.articleLabel.text == WorkWithDataSingleton.savedArticles[i].article {
-                    let image = cell.setupSaveButton(isSaved: true)
-                    cell.saved.setImage(image, for: .normal)
-                }
-                i = i + 1
-            } while i < amountOfSavedArticles
+        for saved in WorkWithDataSingleton.savedArticles {
+            if cell.articleLabel.text == saved.article {
+                let image = cell.setupSaveButton(isSaved: true)
+                cell.saved.setImage(image, for: .normal)
+            }
         }
+        
         cell.selectionStyle = .none
         
         cell.sharingSwitchHandler = { [weak self] in
@@ -292,9 +214,18 @@ extension ArticleVC: UITableViewDelegate, UITableViewDataSource {
                 imageForButton = cell.setupSaveButton(isSaved: false)
                 cell.saved.setImage(imageForButton, for: .normal)
                 
-                //let article = WorkWithDataSingleton.savedArticles[indexPath.item]
-                //PersistenceServce.persistentContainer.viewContext.delete(WorkWithDataSingleton.savedArticles[indexPath.item])
-                //WorkWithDataSingleton.savedArticles.remove(at: indexPath.item)
+                for article in WorkWithDataSingleton.savedArticles {
+                    if article.article == self.textsArray[indexPath.item] {
+                        PersistenceServce.persistentContainer.viewContext.delete(article)
+                    }
+                }
+                
+                WorkWithDataSingleton.savedArticles.removeAll(where: { (article) -> Bool in
+                    article.article == self.textsArray[indexPath.item]
+                })
+                
+                PersistenceServce.saveContext()
+                
             } else {
                 imageForButton = cell.setupSaveButton(isSaved: true)
                 cell.saved.setImage(imageForButton, for: .normal)
@@ -305,9 +236,6 @@ extension ArticleVC: UITableViewDelegate, UITableViewDataSource {
                 
                 WorkWithDataSingleton.savedArticles.append(article)
             }
-            
-            //self.reloadTableWithAnimation()
-            
         }
         
         cell.copyTextSwitchHandler = { [weak self] in

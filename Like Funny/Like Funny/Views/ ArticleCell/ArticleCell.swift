@@ -32,18 +32,12 @@ class ArticleCell: UITableViewCell {
         saved.imageView?.image = UIImage(named: "WhiteStar95")
     }
     
-    func commonInit(_ articleText: String) {
-        articleLabel.text = articleText
-    }
-    
-    //TODO: Use in cellForRow
     func setupSaveButton(isSaved: Bool) -> UIImage {
         if isSaved {
             return UIImage(named: "BlackStar95")!
         } else {
             return UIImage(named: "WhiteStar95")!
         }
-        //saved.imageView?.image = isSaved ? UIImage(named: "BlackStar95") : UIImage(named: "WhiteStar95")
     }
     
     @IBAction func shareText(_ sender: Any) {
@@ -57,6 +51,7 @@ class ArticleCell: UITableViewCell {
         
         saveToCoreDataSwitchHandler?()
     }
+    
     @IBAction func copyText(_ sender: Any) {
         print("Copied Text")
         

@@ -27,8 +27,7 @@ class ViewController: UIViewController, GADBannerViewDelegate {
     let idCategoriesTable = Expression<Int>("id")
     let nameCategoriesTable = Expression<String>("name")
     let parentCategoriesTable = Expression<String>("parent")
-    let keyCategoriesTable = Expression<String>("key")
-    
+    let keyCategoriesTable = Expression<String>("key")    
     
     var articleDatabase: Connection!
     
@@ -36,14 +35,6 @@ class ViewController: UIViewController, GADBannerViewDelegate {
     let idArticleTable = Expression<Int>("id")
     let textArticleTable = Expression<String>("text")
     let articleKey = Expression<String>("key")
-    let isSaved = Expression<Bool>("isSAved")
-    
-    var categoriesArticleDatabase: Connection!
-    
-    let categoriesArticleTable = Table("categoriesArticle")
-    let categoryKey = Expression<String>("key")
-    let articleId = Expression<Int>("articleId")
-    
     
     var categoriesMass: [WorkWithDataSingleton.categoriesModel] = []
     
@@ -51,7 +42,6 @@ class ViewController: UIViewController, GADBannerViewDelegate {
         super.viewDidLoad()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "Favorite"), style: .plain, target: self, action: #selector(addTapped))
-        
         
         setupTables()
         createTables()
@@ -62,12 +52,7 @@ class ViewController: UIViewController, GADBannerViewDelegate {
             getData()
             getDataArticles()
             categoriesMass = readingData(categorySearching: "_root")
-        } else {
-            
-            //categoriesMass = readingData(categorySearching: "_root")
         }
-        
-        
         
         self.categoriesMass = categoriesMass.sorted { $0.name > $1.name }
         
@@ -79,6 +64,7 @@ class ViewController: UIViewController, GADBannerViewDelegate {
     //SetupingTables
     
     func setupTables() {
+        
         do {
             let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
             let fileUrl = documentDirectory.appendingPathComponent("categories").appendingPathExtension("sqlite3")
@@ -88,7 +74,6 @@ class ViewController: UIViewController, GADBannerViewDelegate {
             print(error)
         }
         
-        
         do {
             let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
             let fileUrl = documentDirectory.appendingPathComponent("article").appendingPathExtension("sqlite3")
@@ -97,16 +82,6 @@ class ViewController: UIViewController, GADBannerViewDelegate {
         } catch {
             print(error)
         }
-        
-        do {
-            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            let fileUrl = documentDirectory.appendingPathComponent("categoriesArticle").appendingPathExtension("sqlite3")
-            let database = try Connection(fileUrl.path)
-            self.categoriesArticleDatabase = database
-        } catch {
-            print(error)
-        }
-        
     }
     
     //Create DB
@@ -136,26 +111,11 @@ class ViewController: UIViewController, GADBannerViewDelegate {
             table.column(self.idArticleTable, primaryKey: true)
             table.column(self.textArticleTable)
             table.column(self.articleKey)
-            table.column(self.isSaved)
         }
         
         do {
             try self.articleDatabase.run(createArticleTable)
             print("CREATED ARTICLE TABLE")
-        } catch {
-            print(error)
-        }
-        
-        //CategoriesArticleTable
-        
-        let createCategoriesArticleTable = self.categoriesArticleTable.create { (table) in
-            table.column(self.categoryKey)
-            table.column(self.articleId)
-        }
-        
-        do {
-            try self.categoriesArticleDatabase.run(createCategoriesArticleTable)
-            print("CREATED CATEGORIESARTICLE TABLE")
         } catch {
             print(error)
         }
@@ -197,6 +157,7 @@ class ViewController: UIViewController, GADBannerViewDelegate {
     //Get Data
     
     func getData() {
+        
         DataService.getData { (data) in
             do {
                 let decoder = JSONDecoder()
@@ -205,7 +166,6 @@ class ViewController: UIViewController, GADBannerViewDelegate {
                 //TODO: Use guard let
                 if let dict = categories.categories {
                     
-                    //TODO: Sort func
                     for (k, v) in dict {
                         
                         //TODO: Use guard let
@@ -219,7 +179,6 @@ class ViewController: UIViewController, GADBannerViewDelegate {
                                 } catch {
                                     print(error)
                                 }
-                                
                             }
                         }
                     }
@@ -232,20 +191,22 @@ class ViewController: UIViewController, GADBannerViewDelegate {
     }
     
     func getDataArticles() {
+        
         DataService.getData { (data) in
             do {
                 let decoder = JSONDecoder()
                 self.categories = try decoder.decode(Feed.self, from: data)
                 
                 if let dict2 = categories.items {
+                    
                     for (k, v) in dict2 {
+                        
                         if let categories = v.categories {
                             for category in categories {
+                                
                                 if let elements = v.elements {
-                                    let amountOfElements = elements.count
-                                    var j = 0
+                                    
                                     for element in elements {
-                                    //repeat {
                                         
                                         let heshKey = elements.keys
                                         let dataDict = elements[heshKey.first!]
@@ -262,22 +223,16 @@ class ViewController: UIViewController, GADBannerViewDelegate {
                                                     cleanValue = cleanValue.replacingOccurrences(of: "&ndash;", with: "-", options: .regularExpression, range: nil)
                                                     cleanValue = cleanValue.replacingOccurrences(of: "&rsquo;", with: "’", options: .regularExpression, range: nil)
                                                     
-                                                    let insertCategory = self.articleTable.insert(self.textArticleTable <- cleanValue, self.articleKey <- category.value, self.isSaved <- false)
+                                                    let insertCategory = self.articleTable.insert(self.textArticleTable <- cleanValue, self.articleKey <- category.value)
                                                     do {
                                                         try self.articleDatabase.run(insertCategory)
                                                         print("INSERTED CATEGORY")
                                                     } catch {
-                                                        print("ĘeeeeeeeeeeeeRRRRRRRRRRRRRROOOOOORRRRRR: \(error)")
+                                                        print("Error: \(error)")
                                                     }
                                                 }
                                             }
                                         }
-                                        //if (amountOfElements >= 2) {
-                                         //   break
-                                       // } else {
-                                         //   j = j + 1;
-                                       // }
-                                    //} while (j < amountOfElements)
                                     }
                                 }
                             }
@@ -344,8 +299,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         cell.rootLabel?.text = data.name
         cell.rootImage.image = UIImage(named: data.key!)
         cell.arroyImage.image = UIImage(named: "arroy") //TODO: Rename
-        
-        
         
         return cell
     }

@@ -18,9 +18,4 @@ class RootCell: UITableViewCell {
         super.awakeFromNib()
     }
     
-    func commonInit(_ rootImg: String, categoryName: String, aroyImage: String) {
-        rootImage.image = UIImage(named: rootImg)
-        rootLabel.text = categoryName
-        arroyImage.image = UIImage(named: aroyImage)
-    }
 }

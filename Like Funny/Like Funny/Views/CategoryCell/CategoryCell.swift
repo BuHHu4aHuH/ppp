@@ -16,9 +16,5 @@ class CategoryCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
     }
-
-    func commonInit(_ aroyImage: String, categoryName: String) {
-        arroyImage.image = UIImage(named: aroyImage)
-        txtLabel.text = categoryName
-    }
+    
 }
