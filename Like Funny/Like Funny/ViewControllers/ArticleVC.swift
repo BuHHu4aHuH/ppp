@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import SQLite
 
 class ArticleVC: UIViewController {
     
@@ -17,9 +18,37 @@ class ArticleVC: UIViewController {
     
     var navigationTitle: String?
     
+    var articlesAmount = 0
+    
     var category: String?
     var categoriesMass = Feed()
     var textsArray = [String]()
+    
+    //SQLite Database
+    
+    var categoriesDatabase: Connection!
+    
+    let categoriesTable = Table("categories")
+    let idCategoriesTable = Expression<Int>("id")
+    let nameCategoriesTable = Expression<String>("name")
+    let parentCategoriesTable = Expression<String>("parent")
+    let keyCategoriesTable = Expression<String>("key")
+    
+    
+    var articleDatabase: Connection!
+    
+    let articleTable = Table("article")
+    let idArticleTable = Expression<Int>("id")
+    let textArticleTable = Expression<String>("text")
+    let articleKey = Expression<String>("key")
+    let isSaved = Expression<Bool>("isSaved")
+    
+    
+    var categoriesArticleDatabase: Connection!
+    
+    let categoriesArticleTable = Table("categoriesArticle")
+    let categoryKey = Expression<String>("key")
+    let articleId = Expression<Int>("articleId")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,9 +57,106 @@ class ArticleVC: UIViewController {
         self.navigationItem.title = navigationTitle
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "Favorite"), style: .plain, target: self, action: #selector(addTapped))
         
+        setupTables()
+        createTables()
+        
+        //getData()
+        
+        textsArray = readingData(categorySearching: category!)
+        
+        print("SSSSSSSEEEEEEEEAAAAAARRRRRRRCCCCCCHHHHHHH")
+        print(category)
+        print(textsArray.count)
+        print("lol")
+        print("articlesAmount: \(articlesAmount)")
+        print("lol")
+        
         fetchRequest()
-        getData()
+        //getData()
         setupTableView()
+    }
+    
+    func setupTables() {
+        do {
+            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            let fileUrl = documentDirectory.appendingPathComponent("categories").appendingPathExtension("sqlite3")
+            let database = try Connection(fileUrl.path)
+            self.categoriesDatabase = database
+        } catch {
+            print(error)
+        }
+        
+        
+        do {
+            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            let fileUrl = documentDirectory.appendingPathComponent("article").appendingPathExtension("sqlite3")
+            let database = try Connection(fileUrl.path)
+            self.articleDatabase = database
+        } catch {
+            print(error)
+        }
+        
+        do {
+            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            let fileUrl = documentDirectory.appendingPathComponent("categoriesArticle").appendingPathExtension("sqlite3")
+            let database = try Connection(fileUrl.path)
+            self.categoriesArticleDatabase = database
+        } catch {
+            print(error)
+        }
+        
+    }
+    
+    //Create DB
+    
+    func createTables() {
+        print("CREATE TABLE")
+        
+        //CategoriesTable
+        
+        let createCategoriesTable = self.categoriesTable.create { (table) in
+            table.column(self.idCategoriesTable, primaryKey: true)
+            table.column(self.parentCategoriesTable)
+            table.column(self.keyCategoriesTable)
+            table.column(self.nameCategoriesTable)
+        }
+        
+        do {
+            try self.categoriesDatabase.run(createCategoriesTable)
+            print("CREATED CATEGORIES TABLE")
+        } catch {
+            print(error)
+        }
+        
+        //ArticleTable
+        
+        let createArticleTable = self.articleTable.create { (table) in
+            table.column(self.idArticleTable, primaryKey: true)
+            table.column(self.textArticleTable)
+            table.column(self.articleKey)
+            table.column(self.isSaved)
+        }
+        
+        do {
+            try self.articleDatabase.run(createArticleTable)
+            print("CREATED ARTICLE TABLE")
+        } catch {
+            print(error)
+        }
+        
+        //CategoriesArticleTable
+        
+        let createCategoriesArticleTable = self.categoriesArticleTable.create { (table) in
+            table.column(self.categoryKey, primaryKey: true)
+            table.column(self.articleId, primaryKey: true)
+        }
+        
+        do {
+            try self.categoriesArticleDatabase.run(createCategoriesArticleTable)
+            print("CREATED CATEGORIESARTICLE TABLE")
+        } catch {
+            print(error)
+        }
     }
     
     //Fetch Request
@@ -60,75 +186,42 @@ class ArticleVC: UIViewController {
         textsArray.removeAll()
     }
     
-    //Get Data
-    //TODO: NEED TO REFACTORING!!!!!!!!!!!!!!!!!!!!
-    func getData() {
-        DataService.getData { (data) in
-            do {
-                let decoder = JSONDecoder()
-                self.categoriesMass = try decoder.decode(Feed.self, from: data)
-                
-                if let dict2 = categoriesMass.items {
-                    for (k, v) in dict2 {
-                        
-                        if let categories = v.categories {
-                            let amountOfCategories = categories.count
-                            var i = 0
-                            repeat {
-                                if (category == categories[i]) {
-                                    if let elements = v.elements {
-                                        let amountOfElements = elements.count
-                                        var j = 0
-                                        
-                                        repeat {
-                                            
-                                            let heshKey = elements.keys
-                                            let dataDict = elements[heshKey.first!]
-                                            if let data = dataDict?.data {
-                                                if let zero = data.zero {
-                                                    if let value = zero.value {
-                                                        var cleanValue = value.replacingOccurrences(of: "<[^>]+>", with: "\n", options: .regularExpression, range: nil)
-                                                        cleanValue = cleanValue.replacingOccurrences(of: "&#39;", with: "'", options: .regularExpression, range: nil)
-                                                        cleanValue = cleanValue.replacingOccurrences(of: "&nbsp;", with: "", options: .regularExpression, range: nil)
-                                                        cleanValue = cleanValue.replacingOccurrences(of: "&quot;", with: "\"" , options: .regularExpression, range: nil)
-                                                        cleanValue = cleanValue.replacingOccurrences(of: "&mdash;", with: "-", options: .regularExpression, range: nil)
-                                                        cleanValue = cleanValue.replacingOccurrences(of: "&ndash;", with: "-", options: .regularExpression, range: nil)
-                                                        cleanValue = cleanValue.replacingOccurrences(of: "&rsquo;", with: "’", options: .regularExpression, range: nil)
-                                                        textsArray.append(cleanValue)
-                                                    }
-                                                }
-                                            }
-                                            if (amountOfElements >= 2) {
-                                                break
-                                            } else {
-                                                j = j + 1;
-                                            }
-                                            
-                                        } while (j < amountOfElements)
-                                        
-                                        
-                                    }
-                                    break;
-                                }
-                                i = i + 1;
-                            } while (i < amountOfCategories)
-                        }
-                    }
-                }
-                
-            } catch {
-                print("ERROR:", error)
-            }
-        }
-    }
     
-    //Alert
+   //Alert
     
     func createAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
         alert.addAction(okAction)
         self.present(alert, animated:  true, completion: nil)
+    }
+    
+    //ReadData from SQLite
+    
+    func readingData(categorySearching: String) -> [String] {
+        var categoriesModel = [String]()
+        
+        do {
+            let articles = try self.articleDatabase.prepare(self.articleTable)
+            for article in articles {
+                if article[self.articleKey] == categorySearching {
+                    categoriesModel.append(article[self.textArticleTable])
+                }
+                articlesAmount = articlesAmount + 1
+            }
+            
+        } catch {
+            print(error)
+        }
+        
+        return categoriesModel
+    }
+    
+    func reloadTableWithAnimation() {
+        
+        UIView.transition(with: tableView, duration: 0.25, options: .transitionCrossDissolve, animations: {
+            self.tableView.reloadData()
+        }, completion: nil)
     }
 }
 
@@ -199,9 +292,9 @@ extension ArticleVC: UITableViewDelegate, UITableViewDataSource {
                 imageForButton = cell.setupSaveButton(isSaved: false)
                 cell.saved.setImage(imageForButton, for: .normal)
                 
-//                let article = WorkWithDataSingleton.savedArticles[indexPath.item]
-//                PersistenceServce.persistentContainer.viewContext.delete(article)
-//                WorkWithDataSingleton.savedArticles.remove(at: indexPath.item)
+                //let article = WorkWithDataSingleton.savedArticles[indexPath.item]
+                //PersistenceServce.persistentContainer.viewContext.delete(WorkWithDataSingleton.savedArticles[indexPath.item])
+                //WorkWithDataSingleton.savedArticles.remove(at: indexPath.item)
             } else {
                 imageForButton = cell.setupSaveButton(isSaved: true)
                 cell.saved.setImage(imageForButton, for: .normal)
@@ -209,8 +302,11 @@ extension ArticleVC: UITableViewDelegate, UITableViewDataSource {
                 let article = Article(context: PersistenceServce.context)
                 article.article = self.textsArray[indexPath.item]
                 PersistenceServce.saveContext()
+                
                 WorkWithDataSingleton.savedArticles.append(article)
             }
+            
+            //self.reloadTableWithAnimation()
             
         }
         

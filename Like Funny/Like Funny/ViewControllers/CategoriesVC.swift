@@ -18,58 +18,128 @@ class CategoriesVC: UIViewController {
     
     var categories = Feed()
     
-    var categoryKey: String?
+    var categoryKeyy: String?
    
     var categoriesMass = [WorkWithDataSingleton.categoriesModel]()
-    var keyMass = [String]()
     
     var childMass = [WorkWithDataSingleton.categoriesModel]()
     
-    var database: Connection!
+    //SQLite Database
     
-    let categoriesTable = Table("categoties")
-    let id = Expression<Int>("id")
-    let parentOfCategory = Expression<String>("categories")
-    let keyOfCategory = Expression<String>("key")
-    let name = Expression<String>("name")
+    var categoriesDatabase: Connection!
+    
+    let categoriesTable = Table("categories")
+    let idCategoriesTable = Expression<Int>("id")
+    let nameCategoriesTable = Expression<String>("name")
+    let parentCategoriesTable = Expression<String>("parent")
+    let keyCategoriesTable = Expression<String>("key")
+    
+    
+    var articleDatabase: Connection!
+    
+    let articleTable = Table("article")
+    let idArticleTable = Expression<Int>("id")
+    let textArticleTable = Expression<String>("text")
+    let articleKey = Expression<String>("key")
+    
+    var categoriesArticleDatabase: Connection!
+    
+    let categoriesArticleTable = Table("categoriesArticle")
+    let categoryKey = Expression<String>("key")
+    let articleId = Expression<Int>("articleId")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationItem.title = navigationTitle
         
-        do {
-            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            let fileUrl = documentDirectory.appendingPathComponent("categories").appendingPathExtension("sqlite3")
-            let database = try Connection(fileUrl.path)
-            self.database = database
-        } catch {
-            print(error)
-        }
+        setupTables()
+        createTables()
         
-        createTable()
-        
-        categoriesMass = readingData(categorySearching: categoryKey!)
+        categoriesMass = readingData(categorySearching: categoryKeyy!)
 
         setupTableView()
     }
     
-    //Create DB
+    //SetupingTables
     
-    func createTable() {
-        print("CREATE TABLE")
+    func setupTables() {
+        do {
+            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            let fileUrl = documentDirectory.appendingPathComponent("categories").appendingPathExtension("sqlite3")
+            let database = try Connection(fileUrl.path)
+            self.categoriesDatabase = database
+        } catch {
+            print(error)
+        }
         
-        let createTable = self.categoriesTable.create { (table) in
-            table.column(self.id, primaryKey: true)
-            table.column(self.parentOfCategory)
-            table.column(self.keyOfCategory)
-            table.column(self.name)
-            
+        
+        do {
+            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            let fileUrl = documentDirectory.appendingPathComponent("article").appendingPathExtension("sqlite3")
+            let database = try Connection(fileUrl.path)
+            self.articleDatabase = database
+        } catch {
+            print(error)
         }
         
         do {
-            try self.database.run(createTable)
-            print("CREATED TABLE")
+            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            let fileUrl = documentDirectory.appendingPathComponent("categoriesArticle").appendingPathExtension("sqlite3")
+            let database = try Connection(fileUrl.path)
+            self.categoriesArticleDatabase = database
+        } catch {
+            print(error)
+        }
+        
+    }
+    
+    //Create DB
+    
+    func createTables() {
+        print("CREATE TABLE")
+        
+        //CategoriesTable
+        
+        let createCategoriesTable = self.categoriesTable.create { (table) in
+            table.column(self.idCategoriesTable, primaryKey: true)
+            table.column(self.parentCategoriesTable)
+            table.column(self.keyCategoriesTable)
+            table.column(self.nameCategoriesTable)
+        }
+        
+        do {
+            try self.categoriesDatabase.run(createCategoriesTable)
+            print("CREATED CATEGORIES TABLE")
+        } catch {
+            print(error)
+        }
+        
+        //ArticleTable
+        
+        let createArticleTable = self.articleTable.create { (table) in
+            table.column(self.idArticleTable, primaryKey: true)
+            table.column(self.textArticleTable)
+            table.column(self.articleKey)
+        }
+        
+        do {
+            try self.articleDatabase.run(createArticleTable)
+            print("CREATED ARTICLE TABLE")
+        } catch {
+            print(error)
+        }
+        
+        //CategoriesArticleTable
+        
+        let createCategoriesArticleTable = self.categoriesArticleTable.create { (table) in
+            table.column(self.categoryKey)
+            table.column(self.articleId)
+        }
+        
+        do {
+            try self.categoriesArticleDatabase.run(createCategoriesArticleTable)
+            print("CREATED CATEGORIESARTICLE TABLE")
         } catch {
             print(error)
         }
@@ -81,10 +151,10 @@ class CategoriesVC: UIViewController {
         var categoriesModel: [WorkWithDataSingleton.categoriesModel] = []
         
         do {
-            let categories = try self.database.prepare(self.categoriesTable)
+            let categories = try self.categoriesDatabase.prepare(self.categoriesTable)
             for category in categories {
-                if category[self.parentOfCategory] == categorySearching {
-                    let elem = WorkWithDataSingleton.categoriesModel(name: category[self.name], key: category[self.keyOfCategory])
+                if category[self.parentCategoriesTable] == categorySearching {
+                    let elem = WorkWithDataSingleton.categoriesModel(name: category[self.nameCategoriesTable], key: category[self.keyCategoriesTable])
                     
                     if let element = elem {
                         categoriesModel.append(element)
@@ -129,17 +199,14 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        //searchingCategories(categoryKey: categoriesMass[indexPath.item].key!, category: categoriesMass[indexPath.item].name)
         
         childMass = readingData(categorySearching: categoriesMass[indexPath.item].key!)
-        
-        self.childMass = childMass.sorted { $0.name > $1.name }
         
         if childMass.count != 0 {
             let desVC = storyboard?.instantiateViewController(withIdentifier: CategoriesChildVC.identifier) as! CategoriesChildVC
             
             desVC.navigationTitle = categoriesMass[indexPath.item].name
-            desVC.categoryKey = categoriesMass[indexPath.item].key
+            desVC.categoryKeyy = categoriesMass[indexPath.item].key
             
             self.navigationController?.pushViewController(desVC, animated: true)
             
@@ -158,34 +225,5 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return CGFloat(tableViewCellHeight)
-    }
-    
-    //Searching Child Categories
-    
-    func searchingCategories(categoryKey: String, category: String) {
-//        childMass = readingData(categorySearching: categoryKey)
-//
-//        self.childMass = childMass.sorted { $0.name > $1.name }
-//
-//        if childMass.count != 0 {
-//            let desVC = storyboard?.instantiateViewController(withIdentifier: CategoriesChildVC.identifier) as! CategoriesChildVC
-//
-//            desVC.navigationTitle = childMass[indexPath.item].name
-//            desVC.categoriesMass = names
-//            desVC.keyMass = keys as! [String]
-//
-//            self.navigationController?.pushViewController(desVC, animated: true)
-//
-//            childMass.removeAll()
-//        } else {
-//            let desVC = storyboard?.instantiateViewController(withIdentifier: ArticleVC.identifier) as! ArticleVC
-//
-//            desVC.navigationTitle = category
-//            desVC.category = categoryKey
-//
-//            self.navigationController?.pushViewController(desVC, animated: true)
-//
-//            childMass.removeAll()
-//        }
     }
 }

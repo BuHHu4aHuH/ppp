@@ -19,62 +19,143 @@ class ViewController: UIViewController, GADBannerViewDelegate {
     
     var categories = Feed()
     
-    var database: Connection!
+    //SQLite Database
     
-    let categoriesTable = Table("categoties")
-    let id = Expression<Int>("id")
-    let parentOfCategory = Expression<String>("categories")
-    let keyOfCategory = Expression<String>("key")
-    let name = Expression<String>("name")
+    var categoriesDatabase: Connection!
     
-    var rootCategoriesName = [String]()
-    var rootCategoriesKeys = [String]()
+    let categoriesTable = Table("categories")
+    let idCategoriesTable = Expression<Int>("id")
+    let nameCategoriesTable = Expression<String>("name")
+    let parentCategoriesTable = Expression<String>("parent")
+    let keyCategoriesTable = Expression<String>("key")
+    
+    
+    var articleDatabase: Connection!
+    
+    let articleTable = Table("article")
+    let idArticleTable = Expression<Int>("id")
+    let textArticleTable = Expression<String>("text")
+    let articleKey = Expression<String>("key")
+    let isSaved = Expression<Bool>("isSAved")
+    
+    var categoriesArticleDatabase: Connection!
+    
+    let categoriesArticleTable = Table("categoriesArticle")
+    let categoryKey = Expression<String>("key")
+    let articleId = Expression<Int>("articleId")
+    
     
     var categoriesMass: [WorkWithDataSingleton.categoriesModel] = []
-    var childCategoriesMass: [WorkWithDataSingleton.categoriesModel] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "Favorite"), style: .plain, target: self, action: #selector(addTapped))
         
-        do {
-            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            let fileUrl = documentDirectory.appendingPathComponent("categories").appendingPathExtension("sqlite3")
-            let database = try Connection(fileUrl.path)
-            self.database = database
-        } catch {
-            print(error)
-        }
         
-        createTable()
-        
-        getData()
+        setupTables()
+        createTables()
         
         categoriesMass = readingData(categorySearching: "_root")
+        
+        if categoriesMass.count == 0 {
+            getData()
+            getDataArticles()
+            categoriesMass = readingData(categorySearching: "_root")
+        } else {
+            
+            //categoriesMass = readingData(categorySearching: "_root")
+        }
+        
+        
         
         self.categoriesMass = categoriesMass.sorted { $0.name > $1.name }
         
         setupTableView()
-        setupBanner()
+        
+        //setupBanner()
+    }
+    
+    //SetupingTables
+    
+    func setupTables() {
+        do {
+            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            let fileUrl = documentDirectory.appendingPathComponent("categories").appendingPathExtension("sqlite3")
+            let database = try Connection(fileUrl.path)
+            self.categoriesDatabase = database
+        } catch {
+            print(error)
+        }
+        
+        
+        do {
+            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            let fileUrl = documentDirectory.appendingPathComponent("article").appendingPathExtension("sqlite3")
+            let database = try Connection(fileUrl.path)
+            self.articleDatabase = database
+        } catch {
+            print(error)
+        }
+        
+        do {
+            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            let fileUrl = documentDirectory.appendingPathComponent("categoriesArticle").appendingPathExtension("sqlite3")
+            let database = try Connection(fileUrl.path)
+            self.categoriesArticleDatabase = database
+        } catch {
+            print(error)
+        }
+        
     }
     
     //Create DB
     
-    func createTable() {
+    func createTables() {
         print("CREATE TABLE")
         
-        let createTable = self.categoriesTable.create { (table) in
-            table.column(self.id, primaryKey: true)
-            table.column(self.parentOfCategory)
-            table.column(self.keyOfCategory)//, unique: true)
-            table.column(self.name)
-            
+        //CategoriesTable
+        
+        let createCategoriesTable = self.categoriesTable.create { (table) in
+            table.column(self.idCategoriesTable, primaryKey: true)
+            table.column(self.parentCategoriesTable)
+            table.column(self.keyCategoriesTable)
+            table.column(self.nameCategoriesTable)
         }
         
         do {
-            try self.database.run(createTable)
-            print("CREATED TABLE")
+            try self.categoriesDatabase.run(createCategoriesTable)
+            print("CREATED CATEGORIES TABLE")
+        } catch {
+            print(error)
+        }
+        
+        //ArticleTable
+        
+        let createArticleTable = self.articleTable.create { (table) in
+            table.column(self.idArticleTable, primaryKey: true)
+            table.column(self.textArticleTable)
+            table.column(self.articleKey)
+            table.column(self.isSaved)
+        }
+        
+        do {
+            try self.articleDatabase.run(createArticleTable)
+            print("CREATED ARTICLE TABLE")
+        } catch {
+            print(error)
+        }
+        
+        //CategoriesArticleTable
+        
+        let createCategoriesArticleTable = self.categoriesArticleTable.create { (table) in
+            table.column(self.categoryKey)
+            table.column(self.articleId)
+        }
+        
+        do {
+            try self.categoriesArticleDatabase.run(createCategoriesArticleTable)
+            print("CREATED CATEGORIESARTICLE TABLE")
         } catch {
             print(error)
         }
@@ -131,19 +212,74 @@ class ViewController: UIViewController, GADBannerViewDelegate {
                         if let parent = v.parent {
                             
                             if let name = v.name {
-                                let insertCategory = self.categoriesTable.insert(self.name <- name, self.parentOfCategory <- parent, self.keyOfCategory <- k)
+                                let insertCategory = self.categoriesTable.insert(self.nameCategoriesTable <- name, self.parentCategoriesTable <- parent, self.keyCategoriesTable <- k)
                                 do {
-                                    try self.database.run(insertCategory)
+                                    try self.categoriesDatabase.run(insertCategory)
                                     print("INSERTED CATEGORY")
                                 } catch {
                                     print(error)
                                 }
                                 
-                                if parent == "_root" {
-                                    rootCategoriesKeys.append(k)
-                                    rootCategoriesName.append(name)
+                            }
+                        }
+                    }
+                }
+                
+            } catch {
+                print("ERROR:", error)
+            }
+        }
+    }
+    
+    func getDataArticles() {
+        DataService.getData { (data) in
+            do {
+                let decoder = JSONDecoder()
+                self.categories = try decoder.decode(Feed.self, from: data)
+                
+                if let dict2 = categories.items {
+                    for (k, v) in dict2 {
+                        if let categories = v.categories {
+                            for category in categories {
+                                if let elements = v.elements {
+                                    let amountOfElements = elements.count
+                                    var j = 0
+                                    for element in elements {
+                                    //repeat {
+                                        
+                                        let heshKey = elements.keys
+                                        let dataDict = elements[heshKey.first!]
+                                        if let data = dataDict?.data {
+                                            if let zero = data.zero {
+                                                if let value = zero.value {
+                                                    
+                                                    //TODO: foreach and dictionary
+                                                    var cleanValue = value.replacingOccurrences(of: "<[^>]+>", with: "\n", options: .regularExpression, range: nil)
+                                                    cleanValue = cleanValue.replacingOccurrences(of: "&#39;", with: "'", options: .regularExpression, range: nil)
+                                                    cleanValue = cleanValue.replacingOccurrences(of: "&nbsp;", with: "", options: .regularExpression, range: nil)
+                                                    cleanValue = cleanValue.replacingOccurrences(of: "&quot;", with: "\"" , options: .regularExpression, range: nil)
+                                                    cleanValue = cleanValue.replacingOccurrences(of: "&mdash;", with: "-", options: .regularExpression, range: nil)
+                                                    cleanValue = cleanValue.replacingOccurrences(of: "&ndash;", with: "-", options: .regularExpression, range: nil)
+                                                    cleanValue = cleanValue.replacingOccurrences(of: "&rsquo;", with: "’", options: .regularExpression, range: nil)
+                                                    
+                                                    let insertCategory = self.articleTable.insert(self.textArticleTable <- cleanValue, self.articleKey <- category.value, self.isSaved <- false)
+                                                    do {
+                                                        try self.articleDatabase.run(insertCategory)
+                                                        print("INSERTED CATEGORY")
+                                                    } catch {
+                                                        print("ĘeeeeeeeeeeeeRRRRRRRRRRRRRROOOOOORRRRRR: \(error)")
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        //if (amountOfElements >= 2) {
+                                         //   break
+                                       // } else {
+                                         //   j = j + 1;
+                                       // }
+                                    //} while (j < amountOfElements)
+                                    }
                                 }
-                                
                             }
                         }
                     }
@@ -161,10 +297,10 @@ class ViewController: UIViewController, GADBannerViewDelegate {
         var categoriesModel: [WorkWithDataSingleton.categoriesModel] = []
         
         do {
-            let categories = try self.database.prepare(self.categoriesTable)
+            let categories = try self.categoriesDatabase.prepare(self.categoriesTable)
             for category in categories {
-                if category[self.parentOfCategory] == categorySearching {
-                    let elem = WorkWithDataSingleton.categoriesModel(name: category[self.name], key: category[self.keyOfCategory])
+                if category[self.parentCategoriesTable] == categorySearching {
+                    let elem = WorkWithDataSingleton.categoriesModel(name: category[self.nameCategoriesTable], key: category[self.keyCategoriesTable])
                     
                     if let element = elem {
                         categoriesModel.append(element)
@@ -209,6 +345,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         cell.rootImage.image = UIImage(named: data.key!)
         cell.arroyImage.image = UIImage(named: "arroy") //TODO: Rename
         
+        
+        
         return cell
     }
     
@@ -225,10 +363,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         } else {
             let desVC = storyboard?.instantiateViewController(withIdentifier: CategoriesVC.identifier) as! CategoriesVC
             
-            childCategoriesMass = readingData(categorySearching: categoriesMass[indexPath.item].key!)
-            
             desVC.navigationTitle = categoriesMass[indexPath.item].name
-            desVC.categoryKey = categoriesMass[indexPath.item].key
+            desVC.categoryKeyy = categoriesMass[indexPath.item].key
             
             self.navigationController?.pushViewController(desVC, animated: true)
         }

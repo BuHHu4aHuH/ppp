@@ -29,6 +29,13 @@ class SavedArticlesController: UIViewController {
         alert.addAction(okAction)
         self.present(alert, animated:  true, completion: nil)
     }
+    
+    func reloadTableWithAnimation() {
+        
+        UIView.transition(with: tableView, duration: 0.25, options: .transitionCrossDissolve, animations: {
+            self.tableView.reloadData()
+        }, completion: nil)
+    }
 }
 
 extension SavedArticlesController: UITableViewDelegate, UITableViewDataSource {
@@ -82,6 +89,7 @@ extension SavedArticlesController: UITableViewDelegate, UITableViewDataSource {
             tableView.deleteRows(at: [indexPath], with: .fade)
             
             PersistenceServce.saveContext()
+            self.reloadTableWithAnimation()
         }
         
         cell.copyTextSwitchHandler = { [weak self] in
