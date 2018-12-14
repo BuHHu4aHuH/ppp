@@ -13,6 +13,8 @@ extension UIViewController {
     class var identifier: String {
         return String(describing: self)
     }
+    
+    static let tableViewCellHeight: Int = 70
 }
 
 extension UITableViewCell {

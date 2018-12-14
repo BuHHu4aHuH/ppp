@@ -23,17 +23,17 @@ struct Categories: Codable {
 }
 
 struct data: Codable {
-    var data: zero?
+    var data: Zero?
 }
 
-struct zero: Codable {
-    var zero: value?
+struct Zero: Codable {
+    var zero: Value?
     
     private enum CodingKeys: String, CodingKey {
         case zero = "0"
     }
 }
 
-struct value: Codable {
+struct Value: Codable {
     var value: String?
 }

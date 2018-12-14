@@ -124,7 +124,7 @@
                         </constraints>
                     </view>
                 </subviews>
-                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                <color key="backgroundColor" red="0.84705882352941175" green="0.9137254901960784" blue="0.94509803921568625" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 <constraints>
                     <constraint firstItem="fgm-CO-y9K" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="5" id="Gct-z8-2GY"/>
                     <constraint firstAttribute="trailingMargin" secondItem="fgm-CO-y9K" secondAttribute="trailing" constant="1" id="Ilz-B8-h0c"/>
@@ -142,9 +142,9 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="Copy95" width="95" height="95"/>
-        <image name="Share" width="100" height="100"/>
-        <image name="WhiteStar95" width="409.60000610351562" height="409.60000610351562"/>
+        <image name="Copy95" width="409.60000610351562" height="409.60000610351562"/>
+        <image name="Share" width="204.80000305175781" height="204.80000305175781"/>
+        <image name="WhiteStar95" width="120" height="120"/>
         <image name="black" width="480" height="360"/>
         <image name="logo" width="440" height="124"/>
     </resources>

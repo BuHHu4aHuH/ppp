@@ -7,17 +7,18 @@ target 'Like Funny' do
 
   pod 'Google-Mobile-Ads-SDK'
   pod 'NVActivityIndicatorView'
+  pod 'MBCircularProgressBar'
 
   # Pods for Like Funny
-
-  target 'Like FunnyTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
-  target 'Like FunnyUITests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
+#
+#  target 'Like FunnyTests' do
+#    inherit! :search_paths
+#    # Pods for testing
+#  end
+#
+#  target 'Like FunnyUITests' do
+#    inherit! :search_paths
+#    # Pods for testing
+#  end
 
 end

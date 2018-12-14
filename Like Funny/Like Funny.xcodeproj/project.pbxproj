@@ -13,6 +13,8 @@
 		BF1D5A5621B86C19001D3E66 /* SQLite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BF1D5A3E21B86BCA001D3E66 /* SQLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		BF477DF121AF06A5003F1188 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF477DF021AF06A5003F1188 /* Extensions.swift */; };
 		BF477DF321AF6D7D003F1188 /* WorkWithDataSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF477DF221AF6D7D003F1188 /* WorkWithDataSingleton.swift */; };
+		BF59A19521C31FB000D3F21D /* SQLiteArticleSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF59A19421C31FB000D3F21D /* SQLiteArticleSingleton.swift */; };
+		BF643D5F21C29353001C59E7 /* ShowSplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF643D5E21C29353001C59E7 /* ShowSplashScreen.swift */; };
 		BF7CC6C221B4641A006ACF93 /* pozdravleniya.json in Resources */ = {isa = PBXBuildFile; fileRef = BF7CC6C121B4641A006ACF93 /* pozdravleniya.json */; };
 		BF9E6669218F3EB70017BE7D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9E6668218F3EB70017BE7D /* AppDelegate.swift */; };
 		BF9E666B218F3EB70017BE7D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9E666A218F3EB70017BE7D /* ViewController.swift */; };
@@ -121,6 +123,8 @@
 		BF1D5A3321B86BCA001D3E66 /* SQLite.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SQLite.xcodeproj; path = "../../../../../Downloads/SQLite.swift-master/SQLite.xcodeproj"; sourceTree = "<group>"; };
 		BF477DF021AF06A5003F1188 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		BF477DF221AF6D7D003F1188 /* WorkWithDataSingleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkWithDataSingleton.swift; sourceTree = "<group>"; };
+		BF59A19421C31FB000D3F21D /* SQLiteArticleSingleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteArticleSingleton.swift; sourceTree = "<group>"; };
+		BF643D5E21C29353001C59E7 /* ShowSplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowSplashScreen.swift; sourceTree = "<group>"; };
 		BF7CC6C121B4641A006ACF93 /* pozdravleniya.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = pozdravleniya.json; sourceTree = "<group>"; };
 		BF9E6665218F3EB60017BE7D /* Like Funny.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Like Funny.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF9E6668218F3EB70017BE7D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -256,6 +260,7 @@
 				BFC9E34521A600BB00E3969A /* CategoriesChildVC.swift */,
 				BFC9E34121A01B9D00E3969A /* ArticleVC.swift */,
 				BFD4806F21AA035E00243DC4 /* SavedArticlesController.swift */,
+				BF643D5E21C29353001C59E7 /* ShowSplashScreen.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -287,6 +292,7 @@
 				BF9E66A7218F4BC40017BE7D /* DataService.swift */,
 				BF477DF021AF06A5003F1188 /* Extensions.swift */,
 				BF477DF221AF6D7D003F1188 /* WorkWithDataSingleton.swift */,
+				BF59A19421C31FB000D3F21D /* SQLiteArticleSingleton.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -330,6 +336,7 @@
 				BF9E6662218F3EB60017BE7D /* Frameworks */,
 				BF9E6663218F3EB60017BE7D /* Resources */,
 				BF1D5A5921B86C19001D3E66 /* Embed Frameworks */,
+				398EA24C6F0CF709209269F5 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -450,6 +457,26 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		398EA24C6F0CF709209269F5 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Like Funny/Pods-Like Funny-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/MBCircularProgressBar/MBCircularProgressBar.framework",
+				"${BUILT_PRODUCTS_DIR}/NVActivityIndicatorView/NVActivityIndicatorView.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBCircularProgressBar.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NVActivityIndicatorView.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Like Funny/Pods-Like Funny-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		C52C2F9FB3854A42C92AA3BC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -478,10 +505,12 @@
 				BF9E6671218F3EB70017BE7D /* Like_Funny.xcdatamodeld in Sources */,
 				BF9E66A8218F4BC40017BE7D /* DataService.swift in Sources */,
 				BFD4806D21A9F46000243DC4 /* Article+CoreDataClass.swift in Sources */,
+				BF643D5F21C29353001C59E7 /* ShowSplashScreen.swift in Sources */,
 				BF9E66A6218F4B4D0017BE7D /* CategoryModel.swift in Sources */,
 				BF9E66A1218F4AD90017BE7D /* RootCell.swift in Sources */,
 				BF9E66A4218F4B2E0017BE7D /* FeedModel.swift in Sources */,
 				BF477DF321AF6D7D003F1188 /* WorkWithDataSingleton.swift in Sources */,
+				BF59A19521C31FB000D3F21D /* SQLiteArticleSingleton.swift in Sources */,
 				BFD4807021AA035E00243DC4 /* SavedArticlesController.swift in Sources */,
 				BFD4806A21A9EF4400243DC4 /* PersistenceService.swift in Sources */,
 				BFC9E34621A600BB00E3969A /* CategoriesChildVC.swift in Sources */,

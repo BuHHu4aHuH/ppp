@@ -1,6 +1,0 @@
-framework module Pods_Like_FunnyTests {
-  umbrella header "Pods-Like FunnyTests-umbrella.h"
-
-  export *
-  module * { export * }
-}

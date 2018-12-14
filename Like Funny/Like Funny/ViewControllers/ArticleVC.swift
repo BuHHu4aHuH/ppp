@@ -13,23 +13,12 @@ import SQLite
 class ArticleVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
-    
-    let tableViewCellHeight: Int = 150
+
     var navigationTitle: String?
     
     var category: String?
     var categoriesMass = Feed()
     var textsArray = [String]()
-    
-    //SQLite Database
-    
-    var articleDatabase: Connection!
-    
-    let articleTable = Table("article")
-    let idArticleTable = Expression<Int>("id")
-    let textArticleTable = Expression<String>("text")
-    let articleKey = Expression<String>("key")
-    let isSaved = Expression<Bool>("isSaved")
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -42,9 +31,6 @@ class ArticleVC: UIViewController {
         
         setupNavigationBar()
         
-        setupTables()
-        createTables()
-        
         textsArray = readingData(categorySearching: category!)
         
         fetchRequest()
@@ -54,40 +40,6 @@ class ArticleVC: UIViewController {
     func setupNavigationBar() {
         self.navigationItem.title = navigationTitle
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "Favorite"), style: .plain, target: self, action: #selector(addTapped))
-    }
-    
-    func setupTables() {
-        
-        do {
-            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            let fileUrl = documentDirectory.appendingPathComponent("article").appendingPathExtension("sqlite3")
-            let database = try Connection(fileUrl.path)
-            self.articleDatabase = database
-        } catch {
-            print(error)
-        }
-    }
-    
-    //Create DB
-    
-    func createTables() {
-        print("CREATE TABLE")
-        
-        //ArticleTable
-        
-        let createArticleTable = self.articleTable.create { (table) in
-            table.column(self.idArticleTable, primaryKey: true)
-            table.column(self.textArticleTable)
-            table.column(self.articleKey)
-            table.column(self.isSaved)
-        }
-        
-        do {
-            try self.articleDatabase.run(createArticleTable)
-            print("CREATED ARTICLE TABLE")
-        } catch {
-            print(error)
-        }
     }
     
     //Fetch Request
@@ -132,10 +84,10 @@ class ArticleVC: UIViewController {
         var categoriesModel = [String]()
         
         do {
-            let articles = try self.articleDatabase.prepare(self.articleTable)
+            let articles = try SQLiteArticleSingleton.articleDatabase.prepare(SQLiteArticleSingleton.articleTable)
             for article in articles {
-                if article[self.articleKey] == categorySearching {
-                    categoriesModel.append(article[self.textArticleTable])
+                if article[SQLiteArticleSingleton.articleKey] == categorySearching {
+                    categoriesModel.append(article[SQLiteArticleSingleton.textArticleTable])
                 }
             }
             
