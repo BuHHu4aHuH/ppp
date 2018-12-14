@@ -1,26 +1,20 @@
 PODS:
   - Google-Mobile-Ads-SDK (7.36.0)
   - MBCircularProgressBar (0.3.5)
-  - NVActivityIndicatorView (4.4.0):
-    - NVActivityIndicatorView/Presenter (= 4.4.0)
-  - NVActivityIndicatorView/Presenter (4.4.0)
 
 DEPENDENCIES:
   - Google-Mobile-Ads-SDK
   - MBCircularProgressBar
-  - NVActivityIndicatorView
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Google-Mobile-Ads-SDK
     - MBCircularProgressBar
-    - NVActivityIndicatorView
 
 SPEC CHECKSUMS:
   Google-Mobile-Ads-SDK: 5bb4d2cea811842e104a24780caef63b4808e1bd
   MBCircularProgressBar: 0b795b722a5eb5b0923822f90474e2576a1a7855
-  NVActivityIndicatorView: ec7440a57af2450319d3a4181cca7da6fc127064
 
-PODFILE CHECKSUM: b161727914c73c1fbe30962486e0be295c589e87
+PODFILE CHECKSUM: 49a9a1d3234d99752fdc0dbb8b9286d831b61ec6
 
 COCOAPODS: 1.5.3

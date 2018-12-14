@@ -18,14 +18,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="999" verticalHuggingPriority="999" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" image="Glavna" translatesAutoresizingMaskIntoConstraints="NO" id="B16-LB-XZ0">
-                                <rect key="frame" x="-206" y="-164" width="787" height="995"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="999" verticalHuggingPriority="999" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" image="Glavna" translatesAutoresizingMaskIntoConstraints="NO" id="B16-LB-XZ0">
+                                <rect key="frame" x="16" y="0.0" width="343" height="667"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="B16-LB-XZ0" secondAttribute="trailing" constant="16" id="8NQ-xa-7mG"/>
+                            <constraint firstAttribute="bottom" secondItem="B16-LB-XZ0" secondAttribute="bottom" id="Evi-M1-wre"/>
                             <constraint firstItem="B16-LB-XZ0" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="MHx-Wp-N0q"/>
+                            <constraint firstItem="B16-LB-XZ0" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="RTK-AT-nly"/>
                             <constraint firstItem="B16-LB-XZ0" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="XUw-pC-iMJ"/>
+                            <constraint firstItem="B16-LB-XZ0" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="16" id="bQt-Cv-tQf"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>

@@ -85,6 +85,7 @@ class ArticleVC: UIViewController {
         
         do {
             let articles = try SQLiteArticleSingleton.articleDatabase.prepare(SQLiteArticleSingleton.articleTable)
+            
             for article in articles {
                 if article[SQLiteArticleSingleton.articleKey] == categorySearching {
                     categoriesModel.append(article[SQLiteArticleSingleton.textArticleTable])

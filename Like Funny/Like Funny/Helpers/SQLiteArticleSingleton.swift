@@ -92,32 +92,40 @@ class SQLiteArticleSingleton {
         }
     }
     
-    static func getData() {
+    static func getData(completion: () -> Void) {
         
         DataService.getData { (data) in
             do {
                 let decoder = JSONDecoder()
                 SQLiteArticleSingleton.categories = try decoder.decode(Feed.self, from: data)
                 
-                //TODO: Use guard let
-                if let dict = SQLiteArticleSingleton.categories.categories {
+                guard let dict = SQLiteArticleSingleton.categories.categories else { return }
+                
+                let dictCount: Int = dict.count
+                var dictNumber: Int = 0
+                
+                for (k, v) in dict {
                     
-                    for (k, v) in dict {
+                    dictNumber += 1
+                    
+                    //TODO: Use guard let
+                    if let parent = v.parent {
                         
-                        //TODO: Use guard let
-                        if let parent = v.parent {
-                            
-                            if let name = v.name {
-                                let insertCategory = SQLiteArticleSingleton.categoriesTable.insert(SQLiteArticleSingleton.nameCategoriesTable <- name, SQLiteArticleSingleton.parentCategoriesTable <- parent, SQLiteArticleSingleton.keyCategoriesTable <- k)
-                                do {
-                                    try SQLiteArticleSingleton.categoriesDatabase.run(insertCategory)
-                                    print("INSERTED CATEGORY")
-                                } catch {
-                                    print(error)
-                                }
+                        if let name = v.name {
+                            let insertCategory = SQLiteArticleSingleton.categoriesTable.insert(SQLiteArticleSingleton.nameCategoriesTable <- name, SQLiteArticleSingleton.parentCategoriesTable <- parent, SQLiteArticleSingleton.keyCategoriesTable <- k)
+                            do {
+                                try SQLiteArticleSingleton.categoriesDatabase.run(insertCategory)
+                                print("INSERTED CATEGORY = ", dictNumber)
+                            } catch {
+                                print(error)
                             }
                         }
                     }
+                    
+                    if dictNumber == dictCount {
+                        completion()
+                    }
+                    
                 }
                 
             } catch {
@@ -126,53 +134,57 @@ class SQLiteArticleSingleton {
         }
     }
     
-    static func getDataArticles() {
+    static func getDataArticles(completion: () -> Void) {
         
         DataService.getData { (data) in
             do {
                 let decoder = JSONDecoder()
                 SQLiteArticleSingleton.categories = try decoder.decode(Feed.self, from: data)
                 
-                if let dict2 = SQLiteArticleSingleton.categories.items {
+                guard let dict2 = SQLiteArticleSingleton.categories.items else { return }
+                
+                let dictCount: Int = dict2.count
+                var dictNumber: Int = 0
+                
+                for (_, v) in dict2 {
                     
-                    for (k, v) in dict2 {
+                    dictNumber += 1
+                    
+                    if let categories = v.categories {
                         
-                        if let categories = v.categories {
-                            for category in categories {
+                        for category in categories {
+                            
+                            if let elements = v.elements {
                                 
-                                if let elements = v.elements {
+                                for _ in elements {
                                     
-                                    for element in elements {
+                                    if let heshKey = elements.keys.first, let dataDict = elements[heshKey], let data = dataDict.data, let zero = data.zero, let value = zero.value {
                                         
-                                        let heshKey = elements.keys
-                                        let dataDict = elements[heshKey.first!]
-                                        if let data = dataDict?.data {
-                                            if let zero = data.zero {
-                                                if let value = zero.value {
-                                                    
-                                                    //TODO: foreach and dictionary
-                                                    var cleanValue = value.replacingOccurrences(of: "<[^>]+>", with: "\n", options: .regularExpression, range: nil)
-                                                    cleanValue = cleanValue.replacingOccurrences(of: "&#39;", with: "'", options: .regularExpression, range: nil)
-                                                    cleanValue = cleanValue.replacingOccurrences(of: "&nbsp;", with: "", options: .regularExpression, range: nil)
-                                                    cleanValue = cleanValue.replacingOccurrences(of: "&quot;", with: "\"" , options: .regularExpression, range: nil)
-                                                    cleanValue = cleanValue.replacingOccurrences(of: "&mdash;", with: "-", options: .regularExpression, range: nil)
-                                                    cleanValue = cleanValue.replacingOccurrences(of: "&ndash;", with: "-", options: .regularExpression, range: nil)
-                                                    cleanValue = cleanValue.replacingOccurrences(of: "&rsquo;", with: "’", options: .regularExpression, range: nil)
-                                                    
-                                                    let insertCategory = SQLiteArticleSingleton.articleTable.insert(SQLiteArticleSingleton.textArticleTable <- cleanValue, SQLiteArticleSingleton.articleKey <- category.value)
-                                                    do {
-                                                        try SQLiteArticleSingleton.articleDatabase.run(insertCategory)
-                                                        print("INSERTED CATEGORY")
-                                                    } catch {
-                                                        print("Error: \(error)")
-                                                    }
-                                                }
-                                            }
+                                        //TODO: foreach and dictionary
+                                        var cleanValue = value.replacingOccurrences(of: "<[^>]+>", with: "\n", options: .regularExpression, range: nil)
+                                        cleanValue = cleanValue.replacingOccurrences(of: "&#39;", with: "'", options: .regularExpression, range: nil)
+                                        cleanValue = cleanValue.replacingOccurrences(of: "&nbsp;", with: "", options: .regularExpression, range: nil)
+                                        cleanValue = cleanValue.replacingOccurrences(of: "&quot;", with: "\"" , options: .regularExpression, range: nil)
+                                        cleanValue = cleanValue.replacingOccurrences(of: "&mdash;", with: "-", options: .regularExpression, range: nil)
+                                        cleanValue = cleanValue.replacingOccurrences(of: "&ndash;", with: "-", options: .regularExpression, range: nil)
+                                        cleanValue = cleanValue.replacingOccurrences(of: "&rsquo;", with: "’", options: .regularExpression, range: nil)
+                                        
+                                        let insertCategory = SQLiteArticleSingleton.articleTable.insert(SQLiteArticleSingleton.textArticleTable <- cleanValue, SQLiteArticleSingleton.articleKey <- category.value)
+                                        do {
+                                            try SQLiteArticleSingleton.articleDatabase.run(insertCategory)
+                                            print("INSERTED ARTICLES = ", dictNumber)
+                                        } catch {
+                                            print("Error: \(error)")
                                         }
                                     }
                                 }
                             }
                         }
+                        
+                    }
+                    
+                    if dictNumber == dictCount {
+                        completion()
                     }
                 }
                 

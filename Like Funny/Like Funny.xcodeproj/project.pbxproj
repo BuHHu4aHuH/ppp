@@ -17,7 +17,7 @@
 		BF643D5F21C29353001C59E7 /* ShowSplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF643D5E21C29353001C59E7 /* ShowSplashScreen.swift */; };
 		BF7CC6C221B4641A006ACF93 /* pozdravleniya.json in Resources */ = {isa = PBXBuildFile; fileRef = BF7CC6C121B4641A006ACF93 /* pozdravleniya.json */; };
 		BF9E6669218F3EB70017BE7D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9E6668218F3EB70017BE7D /* AppDelegate.swift */; };
-		BF9E666B218F3EB70017BE7D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9E666A218F3EB70017BE7D /* ViewController.swift */; };
+		BF9E666B218F3EB70017BE7D /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9E666A218F3EB70017BE7D /* MainVC.swift */; };
 		BF9E666E218F3EB70017BE7D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF9E666C218F3EB70017BE7D /* Main.storyboard */; };
 		BF9E6671218F3EB70017BE7D /* Like_Funny.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BF9E666F218F3EB70017BE7D /* Like_Funny.xcdatamodeld */; };
 		BF9E6673218F3EB70017BE7D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF9E6672218F3EB70017BE7D /* Assets.xcassets */; };
@@ -128,7 +128,7 @@
 		BF7CC6C121B4641A006ACF93 /* pozdravleniya.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = pozdravleniya.json; sourceTree = "<group>"; };
 		BF9E6665218F3EB60017BE7D /* Like Funny.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Like Funny.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF9E6668218F3EB70017BE7D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		BF9E666A218F3EB70017BE7D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		BF9E666A218F3EB70017BE7D /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
 		BF9E666D218F3EB70017BE7D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		BF9E6670218F3EB70017BE7D /* Like_Funny.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Like_Funny.xcdatamodel; sourceTree = "<group>"; };
 		BF9E6672218F3EB70017BE7D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -255,12 +255,12 @@
 		BF9E6699218F3F670017BE7D /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				BF9E666A218F3EB70017BE7D /* ViewController.swift */,
+				BF643D5E21C29353001C59E7 /* ShowSplashScreen.swift */,
+				BF9E666A218F3EB70017BE7D /* MainVC.swift */,
 				BF9E66B32190CE9C0017BE7D /* CategoriesVC.swift */,
 				BFC9E34521A600BB00E3969A /* CategoriesChildVC.swift */,
 				BFC9E34121A01B9D00E3969A /* ArticleVC.swift */,
 				BFD4806F21AA035E00243DC4 /* SavedArticlesController.swift */,
-				BF643D5E21C29353001C59E7 /* ShowSplashScreen.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -465,12 +465,10 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Like Funny/Pods-Like Funny-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/MBCircularProgressBar/MBCircularProgressBar.framework",
-				"${BUILT_PRODUCTS_DIR}/NVActivityIndicatorView/NVActivityIndicatorView.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBCircularProgressBar.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NVActivityIndicatorView.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -516,7 +514,7 @@
 				BFC9E34621A600BB00E3969A /* CategoriesChildVC.swift in Sources */,
 				BF9E66B42190CE9C0017BE7D /* CategoriesVC.swift in Sources */,
 				BFC9E34221A01B9D00E3969A /* ArticleVC.swift in Sources */,
-				BF9E666B218F3EB70017BE7D /* ViewController.swift in Sources */,
+				BF9E666B218F3EB70017BE7D /* MainVC.swift in Sources */,
 				BFD4806E21A9F46000243DC4 /* Article+CoreDataProperties.swift in Sources */,
 				BF9E6669218F3EB70017BE7D /* AppDelegate.swift in Sources */,
 				BF477DF121AF06A5003F1188 /* Extensions.swift in Sources */,

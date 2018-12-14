@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MainVC
 //  Like Funny
 //
 //  Created by Maksim Shershun on 11/4/18.
@@ -10,23 +10,26 @@ import UIKit
 import CoreData
 import GoogleMobileAds
 import SQLite
-import NVActivityIndicatorView
 
-class ViewController: UIViewController, GADBannerViewDelegate, NVActivityIndicatorViewable {
+class MainVC: UIViewController, GADBannerViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
+    
     var bannerView: GADBannerView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "Favorite"), style: .plain, target: self, action: #selector(addTapped))
-        
         SQLiteArticleSingleton.categoriesMass = SQLiteArticleSingleton.categoriesMass.sorted { $0.name > $1.name }
         
         setupTableView()
+        setupNavBar()
         
         //setupBanner()
+    }
+    
+    func setupNavBar() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "Favorite"), style: .plain, target: self, action: #selector(addTapped)) 
     }
     
     //Setup Banner
@@ -65,7 +68,7 @@ class ViewController: UIViewController, GADBannerViewDelegate, NVActivityIndicat
 }
 
 //MARK: - TableView
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
+extension MainVC: UITableViewDelegate, UITableViewDataSource {
     
     func setupTableView() {
         tableView.dataSource = self

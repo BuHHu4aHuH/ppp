@@ -14,7 +14,7 @@ extension UIViewController {
         return String(describing: self)
     }
     
-    static let tableViewCellHeight: Int = 70
+    static let tableViewCellHeight: CGFloat = 70
 }
 
 extension UITableViewCell {
