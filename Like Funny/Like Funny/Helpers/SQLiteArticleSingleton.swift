@@ -138,7 +138,7 @@ class SQLiteArticleSingleton {
                     
                     var dictNumber: Int = 0
                     
-                    for (k, v) in dict2 {
+                    for (_, v) in dict2 {
                         dictNumber += 1
                         
                         if let categories = v.categories {

@@ -43,23 +43,24 @@ class ShowSplashScreen: UIViewController {
         
         SQLiteArticleSingleton.categoriesMass = SQLiteArticleSingleton.readingData(categorySearching: "_root")
         
-        if SQLiteArticleSingleton.categoriesMass.isEmpty {
+        if UserDefaults.standard.bool(forKey: "isDownloaded") {
+            
+            RunLoop.current.run(until: Date(timeIntervalSinceNow : 1.0))
+            self.showMainVC()
+            
+        } else {
             
             startProgressView()
             
             DispatchQueue.global().async() {
-            
-            SQLiteArticleSingleton.getData()
-            SQLiteArticleSingleton.getDataArticles()
-            SQLiteArticleSingleton.categoriesMass = SQLiteArticleSingleton.readingData(categorySearching: "_root")
-            
-            self.showMainVC()
-            
-            
+                
+                SQLiteArticleSingleton.getData()
+                SQLiteArticleSingleton.getDataArticles()
+                UserDefaults.standard.set(true, forKey: "isDownloaded")
+                SQLiteArticleSingleton.categoriesMass = SQLiteArticleSingleton.readingData(categorySearching: "_root")
+                
+                self.showMainVC()
             }
-        } else {
-            RunLoop.current.run(until: Date(timeIntervalSinceNow : 1.0))
-            self.showMainVC()
         }
     }
     
