@@ -8,24 +8,28 @@
 
 import UIKit
 import CoreData
-import GoogleMobileAds
+//import GoogleMobileAds
 import SQLite
+import Firebase
 
 class MainVC: UIViewController, GADBannerViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var bannerView: GADBannerView!
     
-    var bannerView: GADBannerView!
+    //var bannerView: GADBannerView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         SQLiteArticleSingleton.categoriesMass = SQLiteArticleSingleton.categoriesMass.sorted { $0.name > $1.name }
         
+        bannerView.adUnitID = "ca-app-pub-9685005451826961/7782646746"
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
+        
         setupTableView()
         setupNavBar()
-        
-        //setupBanner()
     }
     
     func setupNavBar() {
@@ -33,21 +37,8 @@ class MainVC: UIViewController, GADBannerViewDelegate {
     }
     
     //Setup Banner
+
     
-    func setupBanner() {
-        bannerView = GADBannerView(adSize: kGADAdSizeSmartBannerPortrait)
-        self.view.addSubview(bannerView)
-        
-        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
-        bannerView.rootViewController = self
-        bannerView.load(GADRequest())
-        bannerView.translatesAutoresizingMaskIntoConstraints = false
-        bannerView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor).isActive = true
-        
-        let requestAD: GADRequest = GADRequest()
-        requestAD.testDevices = [kGADSimulatorID]
-        bannerView.load(requestAD)
-    }
     
     //Open Saved
     

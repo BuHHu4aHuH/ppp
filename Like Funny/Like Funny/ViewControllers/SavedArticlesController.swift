@@ -8,15 +8,21 @@
 
 import UIKit
 import CoreData
+import Firebase
 
 class SavedArticlesController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var bannerView: GADBannerView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationItem.title = "Сохраненные"
+        
+        bannerView.adUnitID = "ca-app-pub-9685005451826961/7782646746"
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
         
         setupTableView()
     }

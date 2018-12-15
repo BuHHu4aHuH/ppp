@@ -8,11 +8,13 @@
 
 import UIKit
 import SQLite
+import Firebase
 
 class CategoriesVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var bannerView: GADBannerView!
     var navigationTitle: String?
     
     var categories = Feed()
@@ -29,6 +31,10 @@ class CategoriesVC: UIViewController {
         self.navigationItem.title = navigationTitle
         
         categoriesMass = SQLiteArticleSingleton.readingData(categorySearching: categoryKeyy!)
+        
+        bannerView.adUnitID = "ca-app-pub-9685005451826961/7782646746"
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
         
         self.categoriesMass = categoriesMass.sorted { $0.name > $1.name }
 
