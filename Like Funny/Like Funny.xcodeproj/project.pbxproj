@@ -278,9 +278,9 @@
 		BF9E669C218F48640017BE7D /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				BFC9E33A21A01A6600E3969A /*  ArticleCell */,
 				BF9E669E218F4AAB0017BE7D /* RootCell */,
 				BF9E66B52194EC1A0017BE7D /* CategoryCell */,
+				BFC9E33A21A01A6600E3969A /*  ArticleCell */,
 			);
 			path = Views;
 			sourceTree = "<group>";

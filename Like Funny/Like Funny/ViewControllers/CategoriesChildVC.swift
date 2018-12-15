@@ -26,14 +26,18 @@ class CategoriesChildVC: UIViewController  {
         self.navigationItem.title = navigationTitle
         
         categoriesMass = SQLiteArticleSingleton.readingData(categorySearching: categoryKeyy!)
-        
-        bannerView.adUnitID = "ca-app-pub-9685005451826961/7782646746"
-        bannerView.rootViewController = self
-        bannerView.load(GADRequest())
-        
         self.categoriesMass = categoriesMass.sorted { $0.name > $1.name }
         
         setupTableView()
+        setupBanner()
+    }
+    
+    //MARK: Setup Banner
+    
+    func setupBanner() {
+        bannerView.adUnitID = "ca-app-pub-9685005451826961/7782646746"
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
     }
     
 }

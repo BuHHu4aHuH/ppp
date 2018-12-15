@@ -20,11 +20,16 @@ class SavedArticlesController: UIViewController {
         
         self.navigationItem.title = "Сохраненные"
         
+        setupTableView()
+        setupBanner()
+    }
+    
+    //MARK: Setup Banner
+    
+    func setupBanner() {
         bannerView.adUnitID = "ca-app-pub-9685005451826961/7782646746"
         bannerView.rootViewController = self
         bannerView.load(GADRequest())
-        
-        setupTableView()
     }
     
     //Alert

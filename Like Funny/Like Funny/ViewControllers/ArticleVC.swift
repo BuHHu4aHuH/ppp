@@ -14,7 +14,6 @@ import Firebase
 class ArticleVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
-
     @IBOutlet weak var bannerView: GADBannerView!
     
     var navigationTitle: String?
@@ -36,17 +35,20 @@ class ArticleVC: UIViewController {
         
         textsArray = readingData(categorySearching: category!)
         
+        fetchRequest()
+        setupTableView()
+        setupBanner()
+    }
+    
+    //MARK: Setup Banner
+    
+    func setupBanner() {
         bannerView.adUnitID = "ca-app-pub-9685005451826961/7782646746"
         bannerView.rootViewController = self
         bannerView.load(GADRequest())
-        
-        print("KEY: \(category)")
-        print("textArray.count: \(textsArray.count)")
-        print("lol")
-        
-        fetchRequest()
-        setupTableView()
     }
+    
+    //MARK: Setup NavigationBar
     
     func setupNavigationBar() {
         self.navigationItem.title = navigationTitle
@@ -90,25 +92,6 @@ class ArticleVC: UIViewController {
     }
     
     //ReadData from SQLite
-    
-//    func readingData(categorySearching: String) -> [String] {
-//        var categoriesModel = [String]()
-//
-//        do {
-//            let articles = try SQLiteArticleSingleton.articleDatabase.prepare(SQLiteArticleSingleton.articleTable)
-//
-//            for article in articles {
-//                if article[SQLiteArticleSingleton.articleKey] == categorySearching {
-//                    categoriesModel.append(article[SQLiteArticleSingleton.textArticleTable])
-//                }
-//            }
-//
-//        } catch {
-//            print(error)
-//        }
-//
-//        return categoriesModel
-//    }
     
     func readingData(categorySearching: String) -> [String] {
         var categoriesModel = [String]()

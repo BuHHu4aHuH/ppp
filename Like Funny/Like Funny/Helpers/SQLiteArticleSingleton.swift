@@ -137,40 +137,34 @@ class SQLiteArticleSingleton {
                 if let dict2 = categories.items {
                     
                     var dictNumber: Int = 0
+                    
                     for (k, v) in dict2 {
                         dictNumber += 1
                         
                         if let categories = v.categories {
+                            
                             for category in categories {
                                 
                                 if let elements = v.elements {
                                     
                                     for element in elements {
                                         
-                                        let heshKey = elements.keys
-                                        let dataDict = elements[heshKey.first!]
-                                        if let data = dataDict?.data {
-                                            if let zero = data.zero {
-                                                if let value = zero.value {
-                                                    
-                                                    //TODO: foreach and dictionary
-                                                    var cleanValue = value.replacingOccurrences(of: "<[^>]+>", with: "\n", options: .regularExpression, range: nil)
-                                                    cleanValue = cleanValue.replacingOccurrences(of: "&#39;", with: "'", options: .regularExpression, range: nil)
-                                                    cleanValue = cleanValue.replacingOccurrences(of: "&nbsp;", with: "", options: .regularExpression, range: nil)
-                                                    cleanValue = cleanValue.replacingOccurrences(of: "&quot;", with: "\"" , options: .regularExpression, range: nil)
-                                                    cleanValue = cleanValue.replacingOccurrences(of: "&mdash;", with: "-", options: .regularExpression, range: nil)
-                                                    cleanValue = cleanValue.replacingOccurrences(of: "&ndash;", with: "-", options: .regularExpression, range: nil)
-                                                    cleanValue = cleanValue.replacingOccurrences(of: "&rsquo;", with: "’", options: .regularExpression, range: nil)
-                                                    
-                                                    let insertCategory = self.articleTable.insert(self.textArticleTable <- cleanValue, self.articleKey <- category.value)
-                                                    do {
-                                                        try self.articleDatabase.run(insertCategory)
-                                                        print("INSERTED CATEGORY = ", dictNumber)
-                                                        break
-                                                    } catch {
-                                                        print("Error: \(error)")
-                                                    }
-                                                }
+                                        if let value = element.value.data?.zero?.value {
+                                            
+                                            var cleanValue = value.replacingOccurrences(of: "<[^>]+>", with: "\n", options: .regularExpression, range: nil)
+                                            cleanValue = cleanValue.replacingOccurrences(of: "&#39;", with: "'", options: .regularExpression, range: nil)
+                                            cleanValue = cleanValue.replacingOccurrences(of: "&nbsp;", with: "", options: .regularExpression, range: nil)
+                                            cleanValue = cleanValue.replacingOccurrences(of: "&quot;", with: "\"" , options: .regularExpression, range: nil)
+                                            cleanValue = cleanValue.replacingOccurrences(of: "&mdash;", with: "-", options: .regularExpression, range: nil)
+                                            cleanValue = cleanValue.replacingOccurrences(of: "&ndash;", with: "-", options: .regularExpression, range: nil)
+                                            cleanValue = cleanValue.replacingOccurrences(of: "&rsquo;", with: "’", options: .regularExpression, range: nil)
+                                            
+                                            let insertCategory = self.articleTable.insert(self.textArticleTable <- cleanValue, self.articleKey <- category.value)
+                                            do {
+                                                try self.articleDatabase.run(insertCategory)
+                                                print("INSERTED CATEGORY = ", dictNumber)
+                                            } catch {
+                                                print("Error: \(error)")
                                             }
                                         }
                                     }

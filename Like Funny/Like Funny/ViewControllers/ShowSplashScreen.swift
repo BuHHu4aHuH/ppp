@@ -30,7 +30,7 @@ class ShowSplashScreen: UIViewController {
             
             self.progressView.isHidden = false
             
-            UIView.animate(withDuration: 32.5) {
+            UIView.animate(withDuration: 28) {
                 self.progressView.value = 100
             }
         }
@@ -50,11 +50,11 @@ class ShowSplashScreen: UIViewController {
             DispatchQueue.global().async() {
             
             SQLiteArticleSingleton.getData()
-            SQLiteArticleSingleton.getDataArticles() //{
+            SQLiteArticleSingleton.getDataArticles()
             SQLiteArticleSingleton.categoriesMass = SQLiteArticleSingleton.readingData(categorySearching: "_root")
             
             self.showMainVC()
-            //}
+            
             
             }
         } else {

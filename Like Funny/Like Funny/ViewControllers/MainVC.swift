@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreData
-//import GoogleMobileAds
 import SQLite
 import Firebase
 
@@ -17,30 +16,31 @@ class MainVC: UIViewController, GADBannerViewDelegate {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bannerView: GADBannerView!
     
-    //var bannerView: GADBannerView!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         SQLiteArticleSingleton.categoriesMass = SQLiteArticleSingleton.categoriesMass.sorted { $0.name > $1.name }
         
-        bannerView.adUnitID = "ca-app-pub-9685005451826961/7782646746"
-        bannerView.rootViewController = self
-        bannerView.load(GADRequest())
-        
         setupTableView()
         setupNavBar()
+        setupBanner()
     }
+    
+    //MARK: Setup NavigationBar
     
     func setupNavBar() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "Favorite"), style: .plain, target: self, action: #selector(addTapped)) 
     }
     
-    //Setup Banner
+    //MARK: Setup Banner
 
+    func setupBanner() {
+        bannerView.adUnitID = "ca-app-pub-9685005451826961/7782646746"
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
+    }
     
-    
-    //Open Saved
+    //MARK: Open Saved
     
     @objc func addTapped() {
         let desVC = storyboard?.instantiateViewController(withIdentifier: SavedArticlesController.identifier) as! SavedArticlesController
