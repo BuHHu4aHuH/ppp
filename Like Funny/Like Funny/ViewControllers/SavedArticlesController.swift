@@ -74,11 +74,14 @@ extension SavedArticlesController: UITableViewDelegate, UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: ArticleCell.identifier, for: indexPath) as! ArticleCell
         
+        cell.prepareForReuse()
+        
         cell.articleLabel.text = WorkWithDataSingleton.savedArticles[indexPath.item].article
         
         cell.selectionStyle = .none
         
-        cell.saved.setImage(UIImage(named: "BlackStar95"), for: .normal)
+        let image = cell.setupSaveButton(isSaved: true)
+        cell.saved.setImage(image, for: .normal)
         
         cell.sharingSwitchHandler = { [weak self] in
             

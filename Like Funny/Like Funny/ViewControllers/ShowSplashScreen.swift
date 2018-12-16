@@ -30,7 +30,7 @@ class ShowSplashScreen: UIViewController {
             
             self.progressView.isHidden = false
             
-            UIView.animate(withDuration: 28) {
+            UIView.animate(withDuration: 32.5) {
                 self.progressView.value = 100
             }
         }
@@ -49,6 +49,9 @@ class ShowSplashScreen: UIViewController {
             self.showMainVC()
             
         } else {
+            
+            try! SQLiteArticleSingleton.categoriesDatabase.run(SQLiteArticleSingleton.categoriesTable.delete())
+            try! SQLiteArticleSingleton.articleDatabase.run(SQLiteArticleSingleton.articleTable.delete())
             
             startProgressView()
             

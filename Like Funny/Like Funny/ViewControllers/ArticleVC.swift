@@ -19,7 +19,6 @@ class ArticleVC: UIViewController {
     var navigationTitle: String?
     
     var category: String?
-    var categoriesMass = Feed()
     var textsArray = [String]()
     
     override func viewWillAppear(_ animated: Bool) {
