@@ -32,6 +32,12 @@ class ArticleCell: UITableViewCell {
         saved.imageView?.image = UIImage(named: "WhiteStar95")
     }
     
+    func setupRemoveImage() {
+        saved.imageView?.image = UIImage(named: "BlackStar95")
+    }
+    
+    
+    
     func setupSaveButton(isSaved: Bool) -> UIImage {
         if isSaved {
             return UIImage(named: "BlackStar95")!

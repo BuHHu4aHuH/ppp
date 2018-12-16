@@ -8,32 +8,17 @@
 
 import UIKit
 import MBCircularProgressBar
+import NVActivityIndicatorView
+import JTMaterialSpinner
 
-class ShowSplashScreen: UIViewController {
+class ShowSplashScreen: UIViewController, NVActivityIndicatorViewable {
     
-    @IBOutlet weak var progressView: MBCircularProgressBarView!
+    @IBOutlet weak var spinnerView: JTMaterialSpinner!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setupProgressView()
+       
         setupDataToStorage()
-    }
-    
-    func setupProgressView() {
-        progressView.value = 0
-        progressView.isHidden = true
-    }
-    
-    func startProgressView() {
-        DispatchQueue.main.async {
-            
-            self.progressView.isHidden = false
-            
-            UIView.animate(withDuration: 32.5) {
-                self.progressView.value = 100
-            }
-        }
     }
     
     func setupDataToStorage() {
@@ -53,7 +38,16 @@ class ShowSplashScreen: UIViewController {
             try! SQLiteArticleSingleton.categoriesDatabase.run(SQLiteArticleSingleton.categoriesTable.delete())
             try! SQLiteArticleSingleton.articleDatabase.run(SQLiteArticleSingleton.articleTable.delete())
             
-            startProgressView()
+            // Customize the line width
+            spinnerView.circleLayer.lineWidth = 4.0
+            
+            // Change the color of the line
+            spinnerView.circleLayer.strokeColor = UIColor.orange.cgColor
+            
+            // Change the duration of the animation
+            spinnerView.animationDuration = 3
+            
+            spinnerView.beginRefreshing()
             
             DispatchQueue.global().async() {
                 
@@ -61,9 +55,10 @@ class ShowSplashScreen: UIViewController {
                 SQLiteArticleSingleton.getDataArticles()
                 UserDefaults.standard.set(true, forKey: "isDownloaded")
                 SQLiteArticleSingleton.categoriesMass = SQLiteArticleSingleton.readingData(categorySearching: "_root")
-                
+                self.spinnerView.endRefreshing()
                 self.showMainVC()
             }
+            
         }
     }
     

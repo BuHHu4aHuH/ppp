@@ -47,18 +47,24 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (5.3.6):
     - GoogleUtilities/Logger
+  - JTMaterialSpinner (3.0.3)
   - MBCircularProgressBar (0.3.5)
   - nanopb (0.3.901):
     - nanopb/decode (= 0.3.901)
     - nanopb/encode (= 0.3.901)
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
+  - NVActivityIndicatorView (4.4.0):
+    - NVActivityIndicatorView/Presenter (= 4.4.0)
+  - NVActivityIndicatorView/Presenter (4.4.0)
 
 DEPENDENCIES:
   - Firebase/AdMob
   - Firebase/Core
   - Google-Mobile-Ads-SDK
+  - JTMaterialSpinner (~> 3.0)
   - MBCircularProgressBar
+  - NVActivityIndicatorView
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -69,8 +75,10 @@ SPEC REPOS:
     - Google-Mobile-Ads-SDK
     - GoogleAppMeasurement
     - GoogleUtilities
+    - JTMaterialSpinner
     - MBCircularProgressBar
     - nanopb
+    - NVActivityIndicatorView
 
 SPEC CHECKSUMS:
   Firebase: 963d5685fae888a56d6d4d9cfce6b9c976958798
@@ -80,9 +88,11 @@ SPEC CHECKSUMS:
   Google-Mobile-Ads-SDK: 5bb4d2cea811842e104a24780caef63b4808e1bd
   GoogleAppMeasurement: 98b71f5e04142793729a5ef23e5b96651ff4b70f
   GoogleUtilities: 95996bea7c7d9b8fb811b7507669a4a8762f80c7
+  JTMaterialSpinner: 95e86472668c18f67f5d9395dfe15251d6894448
   MBCircularProgressBar: 0b795b722a5eb5b0923822f90474e2576a1a7855
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
+  NVActivityIndicatorView: ec7440a57af2450319d3a4181cca7da6fc127064
 
-PODFILE CHECKSUM: b95a291a8191d7cce85814366cf266018dad84a3
+PODFILE CHECKSUM: 04236c6e78295c65f831fa5b807b18931901e621
 
 COCOAPODS: 1.5.3

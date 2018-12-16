@@ -11,7 +11,7 @@ import CoreData
 import Firebase
 
 class SavedArticlesController: UIViewController {
-
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bannerView: GADBannerView!
     
@@ -74,14 +74,11 @@ extension SavedArticlesController: UITableViewDelegate, UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: ArticleCell.identifier, for: indexPath) as! ArticleCell
         
-        cell.prepareForReuse()
-        
         cell.articleLabel.text = WorkWithDataSingleton.savedArticles[indexPath.item].article
         
         cell.selectionStyle = .none
         
-        let image = cell.setupSaveButton(isSaved: true)
-        cell.saved.setImage(image, for: .normal)
+        cell.setupRemoveImage()
         
         cell.sharingSwitchHandler = { [weak self] in
             

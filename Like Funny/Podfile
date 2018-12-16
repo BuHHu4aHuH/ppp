@@ -7,6 +7,8 @@ target 'Like Funny' do
 
   pod 'Google-Mobile-Ads-SDK'
   pod 'MBCircularProgressBar'
+  pod 'NVActivityIndicatorView'
+  pod 'JTMaterialSpinner', '~> 3.0'
   pod 'Firebase/Core'
   pod 'Firebase/AdMob'
 
