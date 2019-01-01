@@ -12,8 +12,15 @@ import Firebase
 
 class SavedArticlesController: UIViewController {
     
+    @IBOutlet weak var imageView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bannerView: GADBannerView!
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        checkOnSaved()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +29,16 @@ class SavedArticlesController: UIViewController {
         
         setupTableView()
         setupBanner()
+    }
+    
+    //Check if smth saved
+    
+    func checkOnSaved() {
+        if WorkWithDataSingleton.savedArticles.isEmpty {
+            tableView.backgroundView = imageView
+        } else {
+            tableView.backgroundView = nil
+        }
     }
     
     //MARK: Setup Banner
@@ -34,10 +51,12 @@ class SavedArticlesController: UIViewController {
     
     //Alert
     
-    func createAlert (title: String, message: String) {
+    func createAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        let okAction = UIAlertAction(title: "Соглас(на/ен)", style: .default, handler: nil)
+        let cancelAction = UIAlertAction(title: "Нет", style: .destructive, handler: nil)
         alert.addAction(okAction)
+        alert.addAction(cancelAction)
         self.present(alert, animated:  true, completion: nil)
     }
     
@@ -101,6 +120,7 @@ extension SavedArticlesController: UITableViewDelegate, UITableViewDataSource {
             
             PersistenceServce.saveContext()
             self.reloadTableWithAnimation()
+            self.checkOnSaved()
         }
         
         cell.copyTextSwitchHandler = { [weak self] in
@@ -109,9 +129,9 @@ extension SavedArticlesController: UITableViewDelegate, UITableViewDataSource {
             
             UIPasteboard.general.string = WorkWithDataSingleton.savedArticles[indexPath.item].article
             
-            self.createAlert(title: "Warning", message: "Here will be text soon...")
-            
+            self.createAlert(title: "Пользовательское соглашение и правила копирования", message: "1. Настоящее Соглашение является публичной офертой. Получая доступ к поздравлениям данного приложения, Пользователь считается присоединившимся к настоящему Соглашению. \n2. Никакой Контент не может быть скопирован (воспроизведен), переработан, распространен, опубликован или иным способом использован целиком или по частям, без указанния источника. \n3. В случае необходимости использования текстовых  материалов, права на которые принадлежат нашим авторам, Пользователям необходимо обращаться через обратную связь www.likefunny.org. \n4. При копировании прямая ссылка на сайт и указание авторов обязательна! Копирование в коммерческих целях допускается только при письменном разрешении администрации сайта www.likefunny.org.")
         }
+        
         return cell
     }
 }

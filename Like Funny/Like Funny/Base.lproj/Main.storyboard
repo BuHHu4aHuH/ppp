@@ -165,7 +165,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="KZ9-3B-fRJ">
                                 <rect key="frame" x="0.0" y="20" width="375" height="587"/>
-                                <color key="backgroundColor" red="0.84705882352941175" green="0.9137254901960784" blue="0.94509803921568625" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.84705882352941175" green="0.9137254901960784" blue="0.94509803921568625" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sw9-dK-6Iu" customClass="GADBannerView">
                                 <rect key="frame" x="0.0" y="607" width="375" height="60"/>
@@ -205,6 +205,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zes-y0-22d">
+                                <rect key="frame" x="0.0" y="20" width="375" height="587"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="save" translatesAutoresizingMaskIntoConstraints="NO" id="uaS-6Q-Uvf">
+                                        <rect key="frame" x="114.5" y="89" width="146" height="409"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.84705882352941175" green="0.9137254901960784" blue="0.94509803921568625" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstItem="uaS-6Q-Uvf" firstAttribute="centerX" secondItem="Zes-y0-22d" secondAttribute="centerX" id="Pdn-uC-o6c"/>
+                                    <constraint firstItem="uaS-6Q-Uvf" firstAttribute="centerY" secondItem="Zes-y0-22d" secondAttribute="centerY" id="tfj-ee-PKA"/>
+                                </constraints>
+                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Pdi-bZ-E5Q">
                                 <rect key="frame" x="0.0" y="20" width="375" height="587"/>
                                 <color key="backgroundColor" red="0.84705882352941175" green="0.9137254901960784" blue="0.94509803921568625" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -220,18 +233,23 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="T9A-ts-Q5E" firstAttribute="trailing" secondItem="1m5-L3-faI" secondAttribute="trailing" id="4uQ-2g-HaM"/>
+                            <constraint firstItem="T9A-ts-Q5E" firstAttribute="top" secondItem="Zes-y0-22d" secondAttribute="bottom" id="59i-vc-XsO"/>
                             <constraint firstItem="Pdi-bZ-E5Q" firstAttribute="leading" secondItem="1m5-L3-faI" secondAttribute="leading" id="8zK-Ab-O6Y"/>
+                            <constraint firstItem="Zes-y0-22d" firstAttribute="leading" secondItem="1m5-L3-faI" secondAttribute="leading" id="AK2-Dv-oZ5"/>
+                            <constraint firstItem="Zes-y0-22d" firstAttribute="top" secondItem="1m5-L3-faI" secondAttribute="top" id="ANH-0N-8AZ"/>
                             <constraint firstItem="Pdi-bZ-E5Q" firstAttribute="top" secondItem="1m5-L3-faI" secondAttribute="top" id="Vvy-vR-NOQ"/>
                             <constraint firstItem="T9A-ts-Q5E" firstAttribute="top" secondItem="Pdi-bZ-E5Q" secondAttribute="bottom" id="WZP-xg-rjK"/>
                             <constraint firstItem="T9A-ts-Q5E" firstAttribute="top" secondItem="Pdi-bZ-E5Q" secondAttribute="bottom" id="eM5-i2-ivZ"/>
                             <constraint firstItem="T9A-ts-Q5E" firstAttribute="bottom" secondItem="1m5-L3-faI" secondAttribute="bottom" id="hCM-kf-noM"/>
                             <constraint firstItem="T9A-ts-Q5E" firstAttribute="leading" secondItem="1m5-L3-faI" secondAttribute="leading" id="hP8-xm-rgy"/>
+                            <constraint firstItem="Zes-y0-22d" firstAttribute="trailing" secondItem="1m5-L3-faI" secondAttribute="trailing" id="jxp-Lq-cBo"/>
                             <constraint firstItem="Pdi-bZ-E5Q" firstAttribute="trailing" secondItem="1m5-L3-faI" secondAttribute="trailing" id="nis-YU-uUh"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="1m5-L3-faI"/>
                     </view>
                     <connections>
                         <outlet property="bannerView" destination="T9A-ts-Q5E" id="77o-6t-Jon"/>
+                        <outlet property="imageView" destination="Zes-y0-22d" id="jSm-hg-IpA"/>
                         <outlet property="tableView" destination="Pdi-bZ-E5Q" id="v7d-6s-vSk"/>
                     </connections>
                 </viewController>
@@ -312,5 +330,6 @@
     </scenes>
     <resources>
         <image name="Glavna" width="787" height="995"/>
+        <image name="save" width="146" height="409"/>
     </resources>
 </document>

@@ -85,8 +85,10 @@ class ArticleVC: UIViewController {
     
     func createAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        let okAction = UIAlertAction(title: "Соглас(на/ен)", style: .default, handler: nil)
+        let cancelAction = UIAlertAction(title: "Нет", style: .destructive, handler: nil)
         alert.addAction(okAction)
+        alert.addAction(cancelAction)
         self.present(alert, animated:  true, completion: nil)
     }
     
@@ -208,7 +210,7 @@ extension ArticleVC: UITableViewDelegate, UITableViewDataSource {
             
             UIPasteboard.general.string = self.textsArray[indexPath.item]
             
-            self.createAlert(title: "Warning", message: "Here will be text soon...")
+            self.createAlert(title: "Пользовательское соглашение и правила копирования", message: "1. Настоящее Соглашение является публичной офертой. Получая доступ к поздравлениям данного приложения, Пользователь считается присоединившимся к настоящему Соглашению. \n2. Никакой Контент не может быть скопирован (воспроизведен), переработан, распространен, опубликован или иным способом использован целиком или по частям, без указанния источника. \n3. В случае необходимости использования текстовых  материалов, права на которые принадлежат нашим авторам, Пользователям необходимо обращаться через обратную связь www.likefunny.org. \n4. При копировании прямая ссылка на сайт и указание авторов обязательна! Копирование в коммерческих целях допускается только при письменном разрешении администрации сайта www.likefunny.org.")
         }
         
         return cell

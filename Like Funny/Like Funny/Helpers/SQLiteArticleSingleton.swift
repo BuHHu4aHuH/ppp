@@ -158,7 +158,9 @@ class SQLiteArticleSingleton {
                                             cleanValue = cleanValue.replacingOccurrences(of: "&mdash;", with: "-", options: .regularExpression, range: nil)
                                             cleanValue = cleanValue.replacingOccurrences(of: "&ndash;", with: "-", options: .regularExpression, range: nil)
                                             cleanValue = cleanValue.replacingOccurrences(of: "&rsquo;", with: "’", options: .regularExpression, range: nil)
-                                            
+                                            cleanValue = cleanValue.replacingOccurrences(of: "&ldquo;", with: "", options: .regularExpression, range: nil)
+                                            cleanValue = cleanValue.replacingOccurrences(of: "&raquo;", with: "", options: .regularExpression, range: nil)
+
                                             let insertCategory = self.articleTable.insert(self.textArticleTable <- cleanValue, self.articleKey <- category.value)
                                             do {
                                                 try self.articleDatabase.run(insertCategory)

@@ -15,7 +15,6 @@
 		BF477DF321AF6D7D003F1188 /* WorkWithDataSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF477DF221AF6D7D003F1188 /* WorkWithDataSingleton.swift */; };
 		BF59A19521C31FB000D3F21D /* SQLiteArticleSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF59A19421C31FB000D3F21D /* SQLiteArticleSingleton.swift */; };
 		BF643D5F21C29353001C59E7 /* ShowSplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF643D5E21C29353001C59E7 /* ShowSplashScreen.swift */; };
-		BF7CC6C221B4641A006ACF93 /* pozdravleniya.json in Resources */ = {isa = PBXBuildFile; fileRef = BF7CC6C121B4641A006ACF93 /* pozdravleniya.json */; };
 		BF9E6669218F3EB70017BE7D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9E6668218F3EB70017BE7D /* AppDelegate.swift */; };
 		BF9E666B218F3EB70017BE7D /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9E666A218F3EB70017BE7D /* MainVC.swift */; };
 		BF9E666E218F3EB70017BE7D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF9E666C218F3EB70017BE7D /* Main.storyboard */; };
@@ -38,6 +37,7 @@
 		BFD4806D21A9F46000243DC4 /* Article+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD4806B21A9F46000243DC4 /* Article+CoreDataClass.swift */; };
 		BFD4806E21A9F46000243DC4 /* Article+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD4806C21A9F46000243DC4 /* Article+CoreDataProperties.swift */; };
 		BFD4807021AA035E00243DC4 /* SavedArticlesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD4806F21AA035E00243DC4 /* SavedArticlesController.swift */; };
+		BFD8734821DA7BDB00DA8811 /* pozdravleniya.json in Resources */ = {isa = PBXBuildFile; fileRef = BFD8734721DA7BDB00DA8811 /* pozdravleniya.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -125,7 +125,6 @@
 		BF477DF221AF6D7D003F1188 /* WorkWithDataSingleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkWithDataSingleton.swift; sourceTree = "<group>"; };
 		BF59A19421C31FB000D3F21D /* SQLiteArticleSingleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteArticleSingleton.swift; sourceTree = "<group>"; };
 		BF643D5E21C29353001C59E7 /* ShowSplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowSplashScreen.swift; sourceTree = "<group>"; };
-		BF7CC6C121B4641A006ACF93 /* pozdravleniya.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = pozdravleniya.json; sourceTree = "<group>"; };
 		BF9E6665218F3EB60017BE7D /* Like Funny.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Like Funny.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF9E6668218F3EB70017BE7D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BF9E666A218F3EB70017BE7D /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
@@ -150,6 +149,7 @@
 		BFD4806B21A9F46000243DC4 /* Article+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Article+CoreDataClass.swift"; sourceTree = "<group>"; };
 		BFD4806C21A9F46000243DC4 /* Article+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Article+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		BFD4806F21AA035E00243DC4 /* SavedArticlesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedArticlesController.swift; sourceTree = "<group>"; };
+		BFD8734721DA7BDB00DA8811 /* pozdravleniya.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = pozdravleniya.json; path = "../../../../../../Downloads/ppp-master-2/Like Funny/Like Funny/pozdravleniya.json"; sourceTree = "<group>"; };
 		C735BF448E4279717C7EACF0 /* Pods-Like Funny.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Like Funny.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Like Funny/Pods-Like Funny.debug.xcconfig"; sourceTree = "<group>"; };
 		D331E6EFEDA6C72CEA1B0EB6 /* Pods-Like FunnyUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Like FunnyUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Like FunnyUITests/Pods-Like FunnyUITests.release.xcconfig"; sourceTree = "<group>"; };
 		E2EA27642C28CD643754E984 /* Pods-Like FunnyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Like FunnyTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Like FunnyTests/Pods-Like FunnyTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -237,7 +237,7 @@
 		BF9E6667218F3EB60017BE7D /* Like Funny */ = {
 			isa = PBXGroup;
 			children = (
-				BF7CC6C121B4641A006ACF93 /* pozdravleniya.json */,
+				BFD8734721DA7BDB00DA8811 /* pozdravleniya.json */,
 				BF9E6668218F3EB70017BE7D /* AppDelegate.swift */,
 				BF9E669B218F485C0017BE7D /* Models */,
 				BF9E669C218F48640017BE7D /* Views */,
@@ -445,7 +445,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF9E6676218F3EB70017BE7D /* LaunchScreen.storyboard in Resources */,
-				BF7CC6C221B4641A006ACF93 /* pozdravleniya.json in Resources */,
+				BFD8734821DA7BDB00DA8811 /* pozdravleniya.json in Resources */,
 				BF9E66B92194EC590017BE7D /* CategoryCell.xib in Resources */,
 				BF9E66A2218F4AD90017BE7D /* RootCell.xib in Resources */,
 				BF9E6673218F3EB70017BE7D /* Assets.xcassets in Resources */,
@@ -683,6 +683,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MKPAR8VJYY;
 				INFOPLIST_FILE = "Like Funny/Info.plist";
@@ -691,8 +692,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Milin.smshershun;
+				PRODUCT_BUNDLE_IDENTIFIER = com.milin.LikeFunny;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -704,6 +706,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MKPAR8VJYY;
 				INFOPLIST_FILE = "Like Funny/Info.plist";
@@ -712,8 +715,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Milin.smshershun;
+				PRODUCT_BUNDLE_IDENTIFIER = com.milin.LikeFunny;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

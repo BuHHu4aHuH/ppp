@@ -7,11 +7,9 @@
 //
 
 import UIKit
-import MBCircularProgressBar
-import NVActivityIndicatorView
 import JTMaterialSpinner
 
-class ShowSplashScreen: UIViewController, NVActivityIndicatorViewable {
+class ShowSplashScreen: UIViewController {
     
     @IBOutlet weak var spinnerView: JTMaterialSpinner!
     
